@@ -1,0 +1,38 @@
+{
+  "name": "@justkd/template-expo-ts-npm-publish",
+  "author": "Cadence Holmes, @justkd",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "",
+  "keywords": [
+    "rn",
+    "react native",
+    "react-native",
+    "responsive",
+    "responsiveness"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justkd/template-expo-ts-npm-publish"
+  },
+  "scripts": {
+    "publish:private": "npm publish",
+    "publish:public": "npm publish --access public"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-native": ">=0.64"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": [
+    "lib",
+    "index.d.ts",
+    "index.d.ts.map",
+    "index.js",
+    "index.js.map",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ]
+}
