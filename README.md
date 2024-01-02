@@ -1,10 +1,21 @@
-# React Native with Expo template
+# template-expo-ts-npm-publish
 
-By default Expo web is automatically running but you can use the QR code in the application log to open Expo on your iOS or Android device. 
+The codesandbox tasks `runAtStart` for this
+isn't working for the `start` script. Just
+run it manually in a new terminal `npm run start`.
 
-Add your [configuration](https://codesandbox.io/docs/projects/learn/setting-up/tasks) to optimize it for [CodeSandbox](https://codesandbox.io/p/dashboard).
+Don't delete the `publish` directory.
 
-## Resources
+The `package.json` in there is important
+and running the build command will 
+overwrite the other files and directories.
 
-- [CodeSandbox — Docs](https://codesandbox.io/docs/learn)
-- [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
+Do update `publish/package.json` to match your
+module info and dependencies and not the
+example app stuff.
+
+Run `npm adduser` and login with the link 
+before publishing.
+
+Module goes in `src`, example app in `example`.
+Once built, the publishable module is in `publish`.
