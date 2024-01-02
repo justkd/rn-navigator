@@ -17,19 +17,14 @@
         "port": 8080
       }
     },
-    "android": {
-      "name": "android",
-      "command": "npm run android",
+    "build": {
+      "name": "build",
+      "command": "npm run build",
       "runAtStart": false
     },
-    "ios": {
-      "name": "ios",
-      "command": "npm run ios",
-      "runAtStart": false
-    },
-    "web": {
-      "name": "web",
-      "command": "npm run web",
+    "publish:public": {
+      "name": "publish:public",
+      "command": "npm run publish:public",
       "runAtStart": false
     }
   }
