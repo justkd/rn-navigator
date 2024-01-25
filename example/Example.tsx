@@ -1,39 +1,17 @@
-import { Text, StyleSheet } from 'react-native'
-
-const styles = StyleSheet.create({
-  paragraph: {
-    margin: 8,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  h1: {
-    margin: 28,
-    fontSize: 36,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  h2: {
-    margin: 16,
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-})
+import { Home } from './routes/Home'
 
 export function Example() {
-  return (
-    <>
-      <Text style={styles.h1}>Hello CodeSandbox</Text>
-      <Text style={styles.h2}>
-        Start editing to see some magic happen, even on your
-        mobile device!
-      </Text>
-      <br />
-      <br />
-      <Text style={styles.paragraph}>
-        Open Expo on your mobile device with scanning the QR code
-        in the application log under the start tab.
-      </Text>
-    </>
-  )
+  return <Home />
 }
+
+/*
+  - simple consumer api
+  - handles status bar, safe area (including footer)
+  - animates between routes/scenes/views
+  - focus on development benefits
+  - obsolescence
+
+  // const { navigate, to, back, navigating } = useNavigation()
+  // navigate(to['/Home'])
+  // navigate(back())
+*/
