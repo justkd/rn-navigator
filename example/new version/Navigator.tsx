@@ -13,13 +13,21 @@ import { type Logistics, Ship } from './Ship'
 class Expedition extends Ship {
   constructor(logistics?: Logistics) {
     super()
-    this.embark(logistics)
+    this.kit(logistics)
+    this.embark()
   }
+
+  static theater: ComponentType<FC> = () => <></>
 }
 
 function Navigator(logistics?: Logistics) {
-  return new Expedition(logistics)
+  const expedition = new Expedition(logistics)
+  return expedition
 }
+
+/* ************************* */
+/* ************************* */
+/* ************************* */
 
 const NavigationContext = createContext<Expedition | null>(null)
 

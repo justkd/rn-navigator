@@ -32,6 +32,8 @@
     "@typescript-eslint/comma-dangle": "off",
     "comma-dangle": "off",
     "@typescript-eslint/indent": "off",
-    "eslint/indent": "off"
+    "eslint/indent": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "eslint/lines-between-class-members": "off"
   }
 }

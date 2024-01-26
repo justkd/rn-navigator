@@ -19,8 +19,13 @@ type Cargo = Record<string, any> | null
 type Ports = typeof ports
 type LedgerLine = { port: Port; cargo: Cargo }
 type Ledger = LedgerLine[]
+type Volumes = keyof ShipLog
 
-type Reports = { [key in keyof ShipLog]: () => ShipLog[key] }
+type Getters = { [k in Volumes]: () => ShipLog[k] }
+type Setters = Omit<
+  { [k in Volumes]: (next: ShipLog[k]) => void },
+  'ports'
+>
 
 type ShipLog = {
   current: Port
@@ -39,17 +44,48 @@ const ShipsLog = {
 } as ShipLog
 
 export abstract class Ship {
-  protected log: ShipLog = { ...ShipsLog }
+  protected log: ShipLog
+  private embarked: boolean
 
-  protected embark = (logistics?: Logistics) => {
-    this.log = { ...this.log, ...logistics }
+  constructor() {
+    this.log = { ...ShipsLog }
+    this.embarked = false
   }
 
-  public report: Reports = {
+  protected kit = (logistics?: Logistics) => {
+    if (this.embarked) return
+    this.log = { ...ShipsLog, ...logistics }
+  }
+
+  protected embark = () => {
+    if (this.embarked) return
+    this.embarked = true
+  }
+
+  public get: Getters = {
     current: () => `${this.log.current}`,
     next: () => `${this.log.next}`,
     cargo: () => ({ ...this.log.cargo }),
     ledger: () => [...this.log.ledger],
     ports: () => ({ ...this.log.ports }),
+  }
+
+  public set: Setters = {
+    current: (v: Port) => {
+      if (!this.embarked) return
+      this.log.current = v
+    },
+    next: (v: Port) => {
+      if (!this.embarked) return
+      this.log.next = v
+    },
+    cargo: (v: Cargo) => {
+      if (!this.embarked) return
+      this.log.cargo = v
+    },
+    ledger: (v: Ledger) => {
+      if (!this.embarked) return
+      this.log.ledger = v
+    },
   }
 }
