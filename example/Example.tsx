@@ -1,17 +1,9 @@
-import { Home } from './routes/Home'
+import { View } from 'react-native'
+import { Routes } from './Navigation.Routes'
+import { useNavigationContextProvider } from './Navigation'
 
 export function Example() {
-  return <Home />
+  const NavigationProvider =
+    useNavigationContextProvider('/Home')
+  return <View />
 }
-
-/*
-  - simple consumer api
-  - handles status bar, safe area (including footer)
-  - animates between routes/scenes/views
-  - focus on development benefits
-  - obsolescence
-
-  // const { navigate, to, back, navigating } = useNavigation()
-  // navigate(to['/Home'])
-  // navigate(back())
-*/

@@ -7,33 +7,18 @@ import { TwoA } from './routes/Two.A'
 
 /* ******************** */
 
-// const routes = [
-//   ['/Home', Home],
-
-//   ['/One', One],
-//   ['/One/A', OneA],
-
-//   ['/Two', Two],
-//   ['/Two/A', TwoA],
-// ] as const
-
-export const Routes = {
+const routes = {
   '/Home': Home,
+
   '/One': One,
   '/One/A': OneA,
+
   '/Two': Two,
   '/Two/A': TwoA,
-} as const
+}
 
-/* ******************** */
-
-// const mappedRoutes = new Map(routes)
-// const entries = [...mappedRoutes.entries()]
-
-// type NavigationRoute = (typeof entries)[0]
-// type NavigationPath = NavigationRoute[0]
-
-// export const MappedRoutes = new Map<
-//   NavigationPath,
-//   ComponentType
-// >(mappedRoutes)
+export type RouteKey = keyof typeof routes
+export const Routes: Record<RouteKey, ComponentType> = routes
+// export const RouteKeys = Object.fromEntries(
+//   Object.keys(Routes).map((k) => [k, k]),
+// ) as Record<RouteKey, RouteKey>
