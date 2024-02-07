@@ -7,6 +7,8 @@ import {
   useCallback,
 } from 'react'
 
+import { View, Text} from 'react-native'
+
 import {
   type RouteKey,
   Routes,
@@ -45,7 +47,7 @@ const NavigationContext = createContext<ContextType>(defaultCtx)
 
 /* ******************************** */
 
-const TempErrorView = <View style={{
+const TempErrorView = () => <View style={{
   justifyContent: 'center',
   alignItems: 'center'
 }}><Text>{'Nav route error'}</Text></View>
@@ -76,7 +78,7 @@ export function useNavigationContextProvider(
 
   const RoutedView = useMemo(() => {
     const key = navState.current ?? '$RN.Navigator.Error.View'
-    return routes[key]
+    return $routes[key]
   }, [routes, navState])
 
   const NavigationProvider = useCallback(
