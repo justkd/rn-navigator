@@ -3,6 +3,7 @@ import {
   type ComponentType,
   createContext,
   useState,
+  useMemo,
   useCallback,
 } from 'react'
 
@@ -44,19 +45,39 @@ const NavigationContext = createContext<ContextType>(defaultCtx)
 
 /* ******************************** */
 
+const TempErrorView = <View style={{
+  justifyContent: 'center',
+  alignItems: 'center'
+}}><Text>{'Nav route error'}</Text></View>
+
 export function useNavigationContextProvider(
   routes: Record<RouteKey, ComponentType>,
   initialRoute: RouteKey,
 ) {
+
+  const $routes = {
+    ...routes,
+    '$RN.Navigator.Error.View': <TempErrorView />
+  }
+
   const [navState, setNavState] = useState<NavState>({
     current: initialRoute,
     next: null,
   })
-  const navigate = useCallback((state: NavState) => {
-    setNavState(state)
+
+  const navigate = useCallback((to: RouteKey) => {
+    setNavState(prev => {
+      return {
+        current: to,
+        next: null
+      }
+    })
   }, [])
 
-  const RoutedView = useMemo(() => routes[navState.current], [routes, navState])
+  const RoutedView = useMemo(() => {
+    const key = navState.current ?? '$RN.Navigator.Error.View'
+    return routes[key]
+  }, [routes, navState])
 
   const NavigationProvider = useCallback(
     ({ children }: PropsWithChildren) => (
@@ -66,11 +87,12 @@ export function useNavigationContextProvider(
           navigate
         }}
       >
-        {children}
+        <RoutedView />
       </NavigationContext.Provider>
     ),
     [navState],
   )
+  
   return {
     NavigationProvider,
   }
