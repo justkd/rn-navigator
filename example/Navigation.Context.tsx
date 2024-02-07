@@ -59,7 +59,7 @@ export function useNavigationContextProvider(
 
   const $routes = {
     ...routes,
-    '$RN.Navigator.Error.View': <TempErrorView />
+    '$RN.Navigator.Error.View': TempErrorView
   }
 
   const [navState, setNavState] = useState<NavState>({
