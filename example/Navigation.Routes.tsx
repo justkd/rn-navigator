@@ -5,6 +5,14 @@ import { OneA } from './routes/One.A'
 import { Two } from './routes/Two'
 import { TwoA } from './routes/Two.A'
 
+const getTypedRoutes = <T extends string>(
+  routes: Record<T, ComponentType>,
+) => {
+  type RouteKey = keyof typeof routes
+  const Routes: Record<RouteKey, ComponentType> = routes
+  return Routes
+}
+
 /* ******************** */
 
 const routes = {
@@ -18,7 +26,4 @@ const routes = {
 }
 
 export type RouteKey = keyof typeof routes
-export const Routes: Record<RouteKey, ComponentType> = routes
-// export const RouteKeys = Object.fromEntries(
-//   Object.keys(Routes).map((k) => [k, k]),
-// ) as Record<RouteKey, RouteKey>
+export const Routes = getTypedRoutes<keyof typeof routes>(routes)
