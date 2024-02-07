@@ -78,6 +78,8 @@ export function useNavigationContextProvider(
 
   const RoutedView = useMemo(() => {
     const key = navState.current ?? '$RN.Navigator.Error.View'
+    console.log(key)
+    console.log($routes[key])
     return $routes[key]
   }, [routes, navState])
 
