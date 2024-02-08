@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
+import { useNavigationContext } from '../Navigation.Context'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +16,16 @@ const styles = StyleSheet.create({
 
 export function TwoA() {
   const label = '/Two/A'
+  const { navigate, to } = useNavigationContext()
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{label}</Text>
+      <Pressable
+        onPress={() => {
+          navigate(to['/Home'])
+        }}
+      >
+        <Text style={styles.text}>{label}</Text>
+      </Pressable>
     </View>
   )
 }

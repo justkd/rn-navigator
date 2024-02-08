@@ -2,14 +2,20 @@ import {
   type PropsWithChildren,
   type ComponentType,
   createContext,
-  useState,
   useMemo,
+  useState,
+  useContext,
   useCallback,
 } from 'react'
 
-import { View, Text } from 'react-native'
+import { TempErrorView } from './routes/TempErrorView'
 
-import { type RouteKey } from './Navigation.Routes'
+import {
+  type RouteKey,
+  type RoutesKeys,
+} from './Navigation.Routes'
+
+/* ******************************** */
 
 type NavState = {
   current: RouteKey | null
@@ -19,50 +25,30 @@ type NavState = {
 type ContextType = {
   state: NavState
   navigate: (to: RouteKey) => void
-} | null
+  to: RoutesKeys
+}
 
 /* ******************************** */
 
-const defaultCtx: ContextType = {
-  state: {
-    current: null,
-    next: null,
-  },
-  navigate: (to: RouteKey) => to,
-}
-
-const NavigationContext = createContext<ContextType>(defaultCtx)
-
-// export function useNavigationContext() {
-//   return useContext(NavigationContext)
-// }
+const NavigationContext = createContext<ContextType | null>(null)
 
 /* ******************************** */
-
-function TempErrorView() {
-  return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text>Nav route error</Text>
-    </View>
-  )
-}
 
 export function useNavigationContextProvider(
   routes: Record<RouteKey, ComponentType>,
   initialRoute: RouteKey,
 ) {
-  const $routes = useMemo(
-    () => ({
+  const errorViewKey = '$RN.Navigator.Error.View'
+
+  const $routes = useMemo(() => {
+    const privateEntries = Object.fromEntries([
+      [errorViewKey, TempErrorView],
+    ])
+    return {
       ...routes,
-      '$RN.Navigator.Error.View': TempErrorView,
-    }),
-    [routes],
-  )
+      ...privateEntries,
+    } as typeof routes & typeof privateEntries
+  }, [routes])
 
   const [navState, setNavState] = useState<NavState>({
     current: initialRoute,
@@ -77,26 +63,39 @@ export function useNavigationContextProvider(
   }, [])
 
   const RoutedView = useMemo(() => {
-    const key = navState.current ?? '$RN.Navigator.Error.View'
+    const key = navState.current ?? errorViewKey
     return $routes[key]
   }, [$routes, navState])
 
+  const to = useMemo(() => {
+    const entries = Object.keys(routes).map((k) => [k, k])
+    return Object.fromEntries(entries)
+  }, [routes])
+
   const NavigationProvider = useCallback(
-    ({ children }: PropsWithChildren) => (
-      <NavigationContext.Provider
-        value={{
-          state: navState,
-          navigate,
-        }}
-      >
-        <RoutedView />
-        {children}
-      </NavigationContext.Provider>
-    ),
-    [navState, RoutedView, navigate],
+    ({ children }: PropsWithChildren) => {
+      console.log('render navigation provider')
+      return (
+        <NavigationContext.Provider
+          value={{
+            state: navState,
+            to,
+            navigate,
+          }}
+        >
+          <RoutedView />
+          {children}
+        </NavigationContext.Provider>
+      )
+    },
+    [navState, RoutedView, navigate, to],
   )
 
   return {
     NavigationProvider,
   }
+}
+
+export function useNavigationContext() {
+  return useContext(NavigationContext) as ContextType
 }
