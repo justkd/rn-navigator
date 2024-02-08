@@ -50,45 +50,48 @@ export function useNavigationContextProvider(
     } as typeof routes & typeof privateEntries
   }, [routes])
 
-  const [navState, setNavState] = useState<NavState>({
+  const [state, setState] = useState<NavState>({
     current: initialRoute,
     next: null,
   })
 
   const navigate = useCallback((to: RouteKey) => {
-    setNavState((prev) => ({
+    setState((prev) => ({
       current: to,
       next: null,
     }))
   }, [])
 
   const RoutedView = useMemo(() => {
-    const key = navState.current ?? errorViewKey
+    const key = state.current ?? errorViewKey
     return $routes[key]
-  }, [$routes, navState])
+  }, [$routes, state])
 
   const to = useMemo(() => {
     const entries = Object.keys(routes).map((k) => [k, k])
     return Object.fromEntries(entries)
   }, [routes])
 
+  const ctx = useMemo(
+    () => ({
+      state,
+      navigate,
+      to,
+    }),
+    [state, navigate, to],
+  )
+
   const NavigationProvider = useCallback(
     ({ children }: PropsWithChildren) => {
       console.log('render navigation provider')
       return (
-        <NavigationContext.Provider
-          value={{
-            state: navState,
-            to,
-            navigate,
-          }}
-        >
+        <NavigationContext.Provider value={ctx}>
           <RoutedView />
           {children}
         </NavigationContext.Provider>
       )
     },
-    [navState, RoutedView, navigate, to],
+    [ctx, RoutedView],
   )
 
   return {
