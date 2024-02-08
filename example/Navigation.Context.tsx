@@ -7,17 +7,9 @@ import {
   useCallback,
 } from 'react'
 
-import { View, Text} from 'react-native'
+import { View, Text } from 'react-native'
 
-import {
-  type RouteKey,
-  Routes,
-} from './Navigation.Routes'
-
-type NavAction = {
-  type: string
-  to: RouteKey
-}
+import { type RouteKey } from './Navigation.Routes'
 
 type NavState = {
   current: RouteKey | null
@@ -25,7 +17,7 @@ type NavState = {
 }
 
 type ContextType = {
-  state: NavState,
+  state: NavState
   navigate: (to: RouteKey) => void
 } | null
 
@@ -36,7 +28,7 @@ const defaultCtx: ContextType = {
     current: null,
     next: null,
   },
-  navigate: (to: RouteKey) => void
+  navigate: (to: RouteKey) => to,
 }
 
 const NavigationContext = createContext<ContextType>(defaultCtx)
@@ -47,20 +39,30 @@ const NavigationContext = createContext<ContextType>(defaultCtx)
 
 /* ******************************** */
 
-const TempErrorView = () => <View style={{
-  justifyContent: 'center',
-  alignItems: 'center'
-}}><Text>{'Nav route error'}</Text></View>
+function TempErrorView() {
+  return (
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Text>Nav route error</Text>
+    </View>
+  )
+}
 
 export function useNavigationContextProvider(
   routes: Record<RouteKey, ComponentType>,
   initialRoute: RouteKey,
 ) {
-
-  const $routes = {
-    ...routes,
-    '$RN.Navigator.Error.View': TempErrorView
-  }
+  const $routes = useMemo(
+    () => ({
+      ...routes,
+      '$RN.Navigator.Error.View': TempErrorView,
+    }),
+    [routes],
+  )
 
   const [navState, setNavState] = useState<NavState>({
     current: initialRoute,
@@ -68,35 +70,32 @@ export function useNavigationContextProvider(
   })
 
   const navigate = useCallback((to: RouteKey) => {
-    setNavState(prev => {
-      return {
-        current: to,
-        next: null
-      }
-    })
+    setNavState((prev) => ({
+      current: to,
+      next: null,
+    }))
   }, [])
 
   const RoutedView = useMemo(() => {
     const key = navState.current ?? '$RN.Navigator.Error.View'
-    console.log(key)
-    console.log($routes[key])
     return $routes[key]
-  }, [routes, navState])
+  }, [$routes, navState])
 
   const NavigationProvider = useCallback(
     ({ children }: PropsWithChildren) => (
       <NavigationContext.Provider
         value={{
           state: navState,
-          navigate
+          navigate,
         }}
       >
         <RoutedView />
+        {children}
       </NavigationContext.Provider>
     ),
-    [navState],
+    [navState, RoutedView, navigate],
   )
-  
+
   return {
     NavigationProvider,
   }
