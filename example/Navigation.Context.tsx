@@ -34,55 +34,62 @@ const NavigationContext = createContext<ContextType | null>(null)
 
 /* ******************************** */
 
+const privateKeys = {
+  errorView: '$RN.Navigator.Error.View',
+}
+
+const addPrivateRoutes = (
+  routes: Record<RouteKey, ComponentType>,
+) => {
+  const privateEntries = Object.fromEntries([
+    [privateKeys.errorView, TempErrorView],
+  ])
+  return {
+    ...routes,
+    ...privateEntries,
+  } as typeof routes & typeof privateEntries
+}
+
+/* ******************************** */
+
 export function useNavigationContextProvider(
   routes: Record<RouteKey, ComponentType>,
   initialRoute: RouteKey,
 ) {
-  const errorViewKey = '$RN.Navigator.Error.View'
-
-  const $routes = useMemo(() => {
-    const privateEntries = Object.fromEntries([
-      [errorViewKey, TempErrorView],
-    ])
-    return {
-      ...routes,
-      ...privateEntries,
-    } as typeof routes & typeof privateEntries
-  }, [routes])
-
   const [state, setState] = useState<NavState>({
     current: initialRoute,
     next: null,
   })
 
-  const navigate = useCallback((to: RouteKey) => {
-    setState((prev) => ({
-      current: to,
-      next: null,
-    }))
-  }, [])
+  const $routes = useMemo(
+    () => addPrivateRoutes(routes),
+    [routes],
+  )
 
   const RoutedView = useMemo(() => {
-    const key = state.current ?? errorViewKey
+    const key = state.current ?? privateKeys.errorView
     return $routes[key]
   }, [$routes, state])
-
-  const to = useMemo(() => {
-    const entries = Object.keys(routes).map((k) => [k, k])
-    return Object.fromEntries(entries)
-  }, [routes])
 
   const ctx = useMemo(
     () => ({
       state,
-      navigate,
-      to,
+      to: (() => {
+        const entries = Object.keys(routes).map((k) => [k, k])
+        return Object.fromEntries(entries)
+      })(),
+      navigate: (to: RouteKey) => {
+        setState((prev) => ({
+          current: to,
+          next: null,
+        }))
+      },
     }),
-    [state, navigate, to],
+    [state, routes],
   )
 
-  const NavigationProvider = useCallback(
-    ({ children }: PropsWithChildren) => {
+  return {
+    NavigationProvider: ({ children }: PropsWithChildren) => {
       console.log('render navigation provider')
       return (
         <NavigationContext.Provider value={ctx}>
@@ -91,11 +98,6 @@ export function useNavigationContextProvider(
         </NavigationContext.Provider>
       )
     },
-    [ctx, RoutedView],
-  )
-
-  return {
-    NavigationProvider,
   }
 }
 
