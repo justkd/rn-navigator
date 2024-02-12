@@ -110,12 +110,12 @@ export function useNavigationContextProvider(
     console.log('state : current', {
       current,
     })
-  }, [current, next])
+  }, [current])
   useEffect(() => {
     console.log('state : next', {
       next,
     })
-  }, [current, next])
+  }, [next])
 
   const RoutedView = useMemo(() => {
     const currentKey = current ?? privateKeys.errorView
