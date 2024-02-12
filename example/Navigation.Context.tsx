@@ -151,6 +151,10 @@ export function useNavigationContextProvider(
     )
   }, [$routes, current, next, window])
 
+  const navigate = useCallback((to: RouteKey) => {
+    setNext(to)
+  }, [])
+
   const ctx = useMemo(
     () => ({
       state: {
@@ -161,13 +165,10 @@ export function useNavigationContextProvider(
         const entries = Object.keys(routes).map((k) => [k, k])
         return Object.fromEntries(entries)
       })(),
+      navigate,
     }),
-    [current, next, routes],
+    [current, next, routes, navigate],
   )
-
-  const navigate = useCallback((to: RouteKey) => {
-    setNext(to)
-  }, [])
 
   // useEffect(() => {
   //   fadeIn(entryAnim.current).start()
@@ -177,22 +178,7 @@ export function useNavigationContextProvider(
     NavigationProvider: ({ children }: PropsWithChildren) => {
       console.log('render Navigation Provider')
       return (
-        <NavigationContext.Provider
-          value={{
-            state: {
-              current,
-              next,
-            },
-            to: (() => {
-              const entries = Object.keys(routes).map((k) => [
-                k,
-                k,
-              ])
-              return Object.fromEntries(entries)
-            })(),
-            navigate,
-          }}
-        >
+        <NavigationContext.Provider value={ctx}>
           {children}
           {RoutedView}
         </NavigationContext.Provider>
