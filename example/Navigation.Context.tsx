@@ -2,18 +2,23 @@ import {
   type PropsWithChildren,
   type ComponentType,
   createContext,
+  useRef,
   useMemo,
   useState,
+  useEffect,
   useContext,
+  useLayoutEffect,
   useCallback,
 } from 'react'
-
-import { TempErrorView } from './routes/TempErrorView'
-
 import {
-  type RouteKey,
-  type RoutesKeys,
-} from './Navigation.Routes'
+  StyleSheet,
+  View,
+  Animated,
+  ScrollView,
+  useWindowDimensions,
+} from 'react-native'
+import { TempErrorView } from './routes/TempErrorView'
+import type { RouteKey, RoutesKeys } from './Navigation.Routes'
 
 /* ******************************** */
 
@@ -31,8 +36,6 @@ type ContextType = {
 /* ******************************** */
 
 const NavigationContext = createContext<ContextType | null>(null)
-
-/* ******************************** */
 
 const privateKeys = {
   errorView: '$RN.Navigator.Error.View',
@@ -52,55 +55,148 @@ const addPrivateRoutes = (
 
 /* ******************************** */
 
+export function useNavigationContext() {
+  return useContext(NavigationContext) as ContextType
+}
+
+/* ******************************** */
+
+const fadeIn = (anim: Animated.Value) => {
+  const opts = {
+    toValue: 1,
+    useNativeDriver: true,
+  }
+  return {
+    start: () => Animated.timing(anim, opts).start(),
+    style: {
+      opacity: anim,
+    },
+  }
+}
+
+/* ******************************** */
+
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+})
+
 export function useNavigationContextProvider(
   routes: Record<RouteKey, ComponentType>,
   initialRoute: RouteKey,
 ) {
-  const [state, setState] = useState<NavState>({
-    current: initialRoute,
-    next: null,
-  })
+  const window = useWindowDimensions()
+
+  // const [state, setState] = useState<NavState>({
+  //   current: initialRoute,
+  //   next: null,
+  // })
+
+  const [current, setCurrent] = useState<RouteKey | null>(
+    initialRoute,
+  )
+  const [next, setNext] = useState<RouteKey | null>(null)
 
   const $routes = useMemo(
     () => addPrivateRoutes(routes),
     [routes],
   )
 
+  const entryAnim = useRef(new Animated.Value(0))
+  const transitionAnim = useRef(new Animated.Value(0))
+
+  useEffect(() => {
+    console.log('state : current', {
+      current,
+    })
+  }, [current, next])
+  useEffect(() => {
+    console.log('state : next', {
+      next,
+    })
+  }, [current, next])
+
   const RoutedView = useMemo(() => {
-    const key = state.current ?? privateKeys.errorView
-    return $routes[key]
-  }, [$routes, state])
+    const currentKey = current ?? privateKeys.errorView
+    const nextKey = next ?? privateKeys.errorView
+    const CurrentView = $routes[currentKey]
+    const NextView = $routes[nextKey]
+    const { style: fadeStyle } = fadeIn(entryAnim.current)
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: window.height,
+          width: window.width * 2,
+        }}
+      >
+        <Animated.View
+          style={{
+            height: window.height,
+            width: window.width,
+          }}
+        >
+          <CurrentView />
+        </Animated.View>
+        <Animated.View
+          style={{
+            height: window.height,
+            width: window.width,
+          }}
+        >
+          <NextView />
+        </Animated.View>
+      </View>
+    )
+  }, [$routes, current, next, window])
 
   const ctx = useMemo(
     () => ({
-      state,
+      state: {
+        current,
+        next,
+      },
       to: (() => {
         const entries = Object.keys(routes).map((k) => [k, k])
         return Object.fromEntries(entries)
       })(),
-      navigate: (to: RouteKey) => {
-        setState((prev) => ({
-          current: to,
-          next: null,
-        }))
-      },
     }),
-    [state, routes],
+    [current, next, routes],
   )
+
+  const navigate = useCallback((to: RouteKey) => {
+    setNext(to)
+  }, [])
+
+  // useEffect(() => {
+  //   fadeIn(entryAnim.current).start()
+  // }, [])
 
   return {
     NavigationProvider: ({ children }: PropsWithChildren) => {
-      console.log('render navigation provider')
+      console.log('render Navigation Provider')
       return (
-        <NavigationContext.Provider value={ctx}>
-          <RoutedView />
+        <NavigationContext.Provider
+          value={{
+            state: {
+              current,
+              next,
+            },
+            to: (() => {
+              const entries = Object.keys(routes).map((k) => [
+                k,
+                k,
+              ])
+              return Object.fromEntries(entries)
+            })(),
+            navigate,
+          }}
+        >
           {children}
+          {RoutedView}
         </NavigationContext.Provider>
       )
     },
   }
-}
-
-export function useNavigationContext() {
-  return useContext(NavigationContext) as ContextType
 }
