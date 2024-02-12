@@ -152,6 +152,7 @@ export function useNavigationContextProvider(
   }, [$routes, current, next, window])
 
   const navigate = useCallback((to: RouteKey) => {
+    console.log('navigate', to)
     setNext(to)
   }, [])
 
