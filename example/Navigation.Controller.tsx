@@ -76,12 +76,12 @@ export function NavigationController(props: {
   routes: any
   initialRoute: string
 }) {
-  const { routes, initialRoute } = props
+  // const { routes, initialRoute } = props
 
-  const [state, dispatch] = useReducer(
-    navigationReducer,
-    initialState,
-  )
+  // const [state, dispatch] = useReducer(
+  //   navigationReducer,
+  //   initialState,
+  // )
 
   // const setRoutes = (next: Pick<NavigationState, 'routes'>) => {
   //   dispatch({
@@ -90,36 +90,37 @@ export function NavigationController(props: {
   //   })
   // }
 
-  useEffect(() => {
-    if (state.current) return
-    console.log('init NavigationController')
-    dispatch({
-      type: 'init',
-      routes,
-      initialRoute,
-    })
-  }, [initialRoute, routes, state])
+  // useEffect(() => {
+  //   if (state.current) return
+  //   console.log('init NavigationController')
+  //   dispatch({
+  //     type: 'init',
+  //     routes,
+  //     initialRoute,
+  //   })
+  // }, [initialRoute, routes, state])
 
-  function handleNavigation(to: string) {
-    dispatch({
-      type: 'navigate',
-      to,
-    })
-  }
+  // function handleNavigation(to: string) {
+  //   dispatch({
+  //     type: 'navigate',
+  //     to,
+  //   })
+  // }
 
-  function check() {
-    console.log(state)
-  }
+  // function check() {
+  //   console.log(state)
+  // }
 
-  function getRoutes() {
-    return routes
-  }
+  // function getRoutes() {
+  //   return routes
+  // }
 
   console.log('render NavigationController')
 
   return (
     <View>
-      <Pressable
+      <Text>navigate</Text>
+      {/* <Pressable
         onPress={() => {
           handleNavigation('/One')
         }}
@@ -139,7 +140,7 @@ export function NavigationController(props: {
         }}
       >
         <Text>routes</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   )
 }
