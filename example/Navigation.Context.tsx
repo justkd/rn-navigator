@@ -1,8 +1,10 @@
 import { useReducer } from 'react'
+import { Pressable, Text, View } from 'react-native'
 
 type NavigationState = {
   current: string
   next: string
+  payload: any
 }
 
 function navigationReducer(
@@ -25,6 +27,7 @@ function navigationReducer(
 const initialState: NavigationState = {
   current: '/Home',
   next: '',
+  payload: null,
 }
 
 const useNavigation = () => {
@@ -48,7 +51,10 @@ const useNavigation = () => {
   }
 }
 
-export default function App() {
+export default function NavigationController(props: {
+  routes: any
+}) {
+  const { routes } = props
   const { navigate, get } = useNavigation()
 
   function handleNavigation(to: string) {
@@ -59,7 +65,35 @@ export default function App() {
     console.log(get())
   }
 
-  console.log('render App')
+  function getRoutes() {
+    return routes
+  }
 
-  return <h1>Prague itinerary</h1>
+  console.log('render NavigationController')
+
+  return (
+    <View>
+      <Pressable
+        onPress={() => {
+          handleNavigation('/One')
+        }}
+      >
+        <Text>navigate</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          check()
+        }}
+      >
+        <Text>check</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          console.log(getRoutes())
+        }}
+      >
+        <Text>routes</Text>
+      </Pressable>
+    </View>
+  )
 }
