@@ -1,189 +1,65 @@
-import {
-  type PropsWithChildren,
-  type ComponentType,
-  createContext,
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useContext,
-  useLayoutEffect,
-  useCallback,
-} from 'react'
-import {
-  StyleSheet,
-  View,
-  Animated,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native'
-import { TempErrorView } from './routes/TempErrorView'
-import type { RouteKey, RoutesKeys } from './Navigation.Routes'
+import { useReducer } from 'react'
 
-/* ******************************** */
-
-type NavState = {
-  current: RouteKey | null
-  next: RouteKey | null
+type NavigationState = {
+  current: string
+  next: string
 }
 
-type ContextType = {
-  state: NavState
-  navigate: (to: RouteKey) => void
-  to: RoutesKeys
+function navigationReducer(
+  state: NavigationState,
+  action: { type: string } & Record<string, any>,
+) {
+  switch (action.type) {
+    case 'navigate': {
+      return {
+        ...state,
+        next: action.to,
+      }
+    }
+    default: {
+      throw Error(`Unknown action: ${action.type}`)
+    }
+  }
 }
 
-/* ******************************** */
-
-const NavigationContext = createContext<ContextType | null>(null)
-
-// const privateKeys = {
-//   errorView: '$RN.Navigator.Error.View',
-// }
-
-// const addPrivateRoutes = (
-//   routes: Record<RouteKey, ComponentType>,
-// ) => {
-//   const privateEntries = Object.fromEntries([
-//     [privateKeys.errorView, TempErrorView],
-//   ])
-//   return {
-//     ...routes,
-//     ...privateEntries,
-//   } as typeof routes & typeof privateEntries
-// }
-
-/* ******************************** */
-
-export function useNavigationContext() {
-  return useContext(NavigationContext) as ContextType
+const initialState: NavigationState = {
+  current: '/Home',
+  next: '',
 }
 
-/* ******************************** */
-
-// const fadeIn = (anim: Animated.Value) => {
-//   const opts = {
-//     toValue: 1,
-//     useNativeDriver: true,
-//   }
-//   return {
-//     start: () => Animated.timing(anim, opts).start(),
-//     style: {
-//       opacity: anim,
-//     },
-//   }
-// }
-
-/* ******************************** */
-
-// const styles = StyleSheet.create({
-//   flex: {
-//     flex: 1,
-//   },
-// })
-
-export function NavigationContextProvider({
-  routes,
-  initialRoute,
-  children,
-}: PropsWithChildren<{
-  routes: Record<RouteKey, ComponentType>
-  initialRoute: RouteKey
-}>) {
-  // const window = useWindowDimensions()
-
-  // const [state, setState] = useState<NavState>({
-  //   current: initialRoute,
-  //   next: null,
-  // })
-
-  const [current, setCurrent] = useState<RouteKey | null>(
-    initialRoute,
+const useNavigation = () => {
+  const [state, dispatch] = useReducer(
+    navigationReducer,
+    initialState,
   )
-  const [next, setNext] = useState<RouteKey | null>(null)
 
-  // const $routes = useMemo(
-  //   () => addPrivateRoutes(routes),
-  //   [routes],
-  // )
-
-  // const entryAnim = useRef(new Animated.Value(0))
-  // const transitionAnim = useRef(new Animated.Value(0))
-
-  useEffect(() => {
-    console.log('state : current', {
-      current,
+  const navigate = (to: string) => {
+    dispatch({
+      type: 'navigate',
+      to,
     })
-  }, [current])
-  useEffect(() => {
-    console.log('state : next', {
-      next,
-    })
-  }, [next])
+  }
 
-  // const RoutedView = useMemo(() => {
-  //   const currentKey = current ?? privateKeys.errorView
-  //   const nextKey = next ?? privateKeys.errorView
-  //   const CurrentView = $routes[currentKey]
-  //   const NextView = $routes[nextKey]
-  //   const { style: fadeStyle } = fadeIn(entryAnim.current)
-  //   return (
-  //     <View
-  //       style={{
-  //         flexDirection: 'row',
-  //         height: window.height,
-  //         width: window.width * 2,
-  //       }}
-  //     >
-  //       <Animated.View
-  //         style={{
-  //           height: window.height,
-  //           width: window.width,
-  //         }}
-  //       >
-  //         <CurrentView />
-  //       </Animated.View>
-  //       <Animated.View
-  //         style={{
-  //           height: window.height,
-  //           width: window.width,
-  //         }}
-  //       >
-  //         <NextView />
-  //       </Animated.View>
-  //     </View>
-  //   )
-  // }, [$routes, current, next, window])
+  const get = () => ({ ...state })
 
-  const navigate = useCallback((to: RouteKey) => {
-    console.log('navigate', to)
-    setNext(to)
-  }, [])
+  return {
+    navigate,
+    get,
+  }
+}
 
-  const ctx = useMemo(
-    () => ({
-      state: {
-        current,
-        next,
-      },
-      to: (() => {
-        const entries = Object.keys(routes).map((k) => [k, k])
-        return Object.fromEntries(entries)
-      })(),
-      navigate,
-    }),
-    [current, next, routes, navigate],
-  )
+export default function App() {
+  const { navigate, get } = useNavigation()
 
-  // useEffect(() => {
-  //   fadeIn(entryAnim.current).start()
-  // }, [])
+  function handleNavigation(to: string) {
+    navigate(to)
+  }
 
-  console.log('render Navigation Provider')
-  return (
-    <NavigationContext.Provider value={ctx}>
-      {children}
-      {/* {RoutedView} */}
-    </NavigationContext.Provider>
-  )
+  function check() {
+    console.log(get())
+  }
+
+  console.log('render App')
+
+  return <h1>Prague itinerary</h1>
 }
