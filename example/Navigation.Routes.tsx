@@ -18,5 +18,5 @@ const routes = {
 }
 
 export type RouteKey = keyof typeof routes
-export type RoutesKeys = Record<RouteKey, RouteKey>
+export type RouteKeys = Record<RouteKey, RouteKey>
 export const Routes = getTypedRoutes<RouteKey>(routes)

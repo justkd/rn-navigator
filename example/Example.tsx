@@ -1,11 +1,11 @@
-import App from './Navigation.Context'
+import { NavigationController } from './Navigation.Controller'
 import { Routes } from './Navigation.Routes'
 
 export function Example() {
   // const useNCP = NavigationContextProvider
   // const { NavigationProvider } = useNCP(Routes, '/Home')
   console.log('render Example')
-  return <App routes={Routes} />
+  return <NavigationController routes={Routes} />
 }
 
 // import { Routes } from './Navigation.Routes'

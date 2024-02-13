@@ -1,11 +1,14 @@
-import { useReducer } from 'react'
+import { type ComponentType, useReducer, useEffect } from 'react'
 import { Pressable, Text, View } from 'react-native'
 
 type NavigationState = {
   current: string
   next: string
   payload: any
+  routes: Record<string, ComponentType>
 }
+
+/* ************************************ */
 
 function navigationReducer(
   state: NavigationState,
@@ -18,6 +21,13 @@ function navigationReducer(
         next: action.to,
       }
     }
+    case 'init': {
+      return {
+        ...state,
+        current: action.initialRoute,
+        routes: action.routes,
+      }
+    }
     default: {
       throw Error(`Unknown action: ${action.type}`)
     }
@@ -25,12 +35,15 @@ function navigationReducer(
 }
 
 const initialState: NavigationState = {
-  current: '/Home',
+  current: '',
   next: '',
   payload: null,
+  routes: {},
 }
 
-const useNavigation = () => {
+/* ************************************ */
+
+export const useNavigation = () => {
   const [state, dispatch] = useReducer(
     navigationReducer,
     initialState,
@@ -43,26 +56,59 @@ const useNavigation = () => {
     })
   }
 
+  // const to: () => RouteKeys = () => {
+  //   const entries = Object.entries(Routes).map(([k]) => [k, k])
+  //   return Object.fromEntries(entries)
+  // }
+
   const get = () => ({ ...state })
 
   return {
     navigate,
+    // to,
     get,
   }
 }
 
-export default function NavigationController(props: {
+/* ************************************ */
+
+export function NavigationController(props: {
   routes: any
+  initialRoute: string
 }) {
-  const { routes } = props
-  const { navigate, get } = useNavigation()
+  const { routes, initialRoute } = props
+
+  const [state, dispatch] = useReducer(
+    navigationReducer,
+    initialState,
+  )
+
+  // const setRoutes = (next: Pick<NavigationState, 'routes'>) => {
+  //   dispatch({
+  //     type: 'setRoutes',
+  //     routes: next,
+  //   })
+  // }
+
+  useEffect(() => {
+    if (state.current) return
+    console.log('init NavigationController')
+    dispatch({
+      type: 'init',
+      routes,
+      initialRoute,
+    })
+  }, [initialRoute, routes, state])
 
   function handleNavigation(to: string) {
-    navigate(to)
+    dispatch({
+      type: 'navigate',
+      to,
+    })
   }
 
   function check() {
-    console.log(get())
+    console.log(state)
   }
 
   function getRoutes() {
