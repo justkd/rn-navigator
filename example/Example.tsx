@@ -5,7 +5,9 @@ export function Example() {
   // const useNCP = NavigationContextProvider
   // const { NavigationProvider } = useNCP(Routes, '/Home')
   console.log('render Example')
-  return <NavigationController routes={Routes} />
+  return (
+    <NavigationController routes={Routes} initialRoute="/Home" />
+  )
 }
 
 // import { Routes } from './Navigation.Routes'
