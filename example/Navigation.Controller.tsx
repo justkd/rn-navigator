@@ -83,13 +83,6 @@ export function NavigationController(props: {
     initialState,
   )
 
-  const setRoutes = (next: Pick<NavigationState, 'routes'>) => {
-    dispatch({
-      type: 'setRoutes',
-      routes: next,
-    })
-  }
-
   useEffect(() => {
     if (state.current) return
     console.log('init NavigationController')
@@ -107,12 +100,12 @@ export function NavigationController(props: {
     })
   }
 
-  function check() {
+  function getState() {
     console.log(state)
   }
 
   function getRoutes() {
-    return routes
+    console.log(getRoutes())
   }
 
   console.log('render NavigationController')
@@ -128,14 +121,14 @@ export function NavigationController(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          check()
+          getState()
         }}
       >
         <Text>check</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          console.log(getRoutes())
+          getRoutes()
         }}
       >
         <Text>routes</Text>
