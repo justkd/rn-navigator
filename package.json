@@ -1,7 +1,7 @@
 {
   "name": "template-expo-ts-npm-publish",
   "version": "1.0.0",
-  "main": "./node_modules/expo/AppEntry",
+    "main": "./node_modules/expo/AppEntry",
   "keywords": [
     "rn",
     "react native",
