@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useNavigation } from '../Navigation.Controller'
 
@@ -17,6 +18,12 @@ const styles = StyleSheet.create({
 export function OneA() {
   const label = '/One/A'
   const { navigate, to } = useNavigation()
+  useEffect(() => {
+    console.log('mount one/a')
+    return () => {
+      console.log('dismount one/a')
+    }
+  }, [])
   return (
     <View style={styles.container}>
       <Pressable

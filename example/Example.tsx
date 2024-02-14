@@ -1,26 +1,15 @@
 import { NavigationController } from './Navigation.Controller'
 import { Routes } from './Navigation.Routes'
+import PlaceholderImage from './placeholder_image.png'
 
 export function Example() {
-  // const useNCP = NavigationContextProvider
-  // const { NavigationProvider } = useNCP(Routes, '/Home')
   console.log('render Example')
   return (
-    <NavigationController routes={Routes} initialRoute="/Home" />
+    <NavigationController
+      routes={Routes}
+      initialRoute="/Home"
+      backgroundColor="black"
+      backgroundImage={PlaceholderImage}
+    />
   )
 }
-
-// import { Routes } from './Navigation.Routes'
-// import { NavigationContextProvider } from './Navigation.Context'
-
-// export function Example() {
-//   // const useNCP = NavigationContextProvider
-//   // const { NavigationProvider } = useNCP(Routes, '/Home')
-//   console.log('render Example')
-//   return (
-//     <NavigationContextProvider
-//       routes={Routes}
-//       initialRoute="/Home"
-//     />
-//   )
-// }

@@ -7,10 +7,13 @@ import {
   useMemo,
   useRef,
 } from 'react'
+
 import {
   Animated,
+  Easing,
+  ImageBackground,
   useWindowDimensions,
-  View,
+  type ImageSourcePropType,
 } from 'react-native'
 
 type NavigationState = {
@@ -25,8 +28,13 @@ function navigationReducer(
   action: { type: string } & Record<string, any>,
 ) {
   switch (action.type) {
+    case 'init': {
+      return {
+        ...state,
+        queue: [action.initialRoute],
+      }
+    }
     case 'navigate': {
-      console.log('reducer navigate', action)
       return {
         ...state,
         queue: [...state.queue, action.to],
@@ -34,17 +42,11 @@ function navigationReducer(
       }
     }
     case 'shift': {
-      console.log('reducer shift', action)
+      const queue = [...state.queue]
+      queue.shift()
       return {
         ...state,
-        queue: state.queue.shift(),
-      }
-    }
-    case 'init': {
-      console.log('reducer init', action)
-      return {
-        ...state,
-        queue: [action.initialRoute],
+        queue,
       }
     }
     default: {
@@ -64,8 +66,15 @@ const NavigationContext = createContext<any>(null)
 export function NavigationController(props: {
   routes: any
   initialRoute: string
+  backgroundColor?: string
+  backgroundImage?: ImageSourcePropType
 }) {
-  const { routes, initialRoute } = props
+  const {
+    routes,
+    initialRoute,
+    backgroundColor,
+    backgroundImage,
+  } = props
 
   const [state, dispatch] = useReducer(
     navigationReducer,
@@ -83,14 +92,8 @@ export function NavigationController(props: {
 
   const CurrentView = useMemo(() => {
     const Current = routes[state.queue[0]]
-    console.log(state)
     return Current ? <Current /> : null
   }, [routes, state])
-
-  // const NextView = useMemo(() => {
-  //   const Next = routes[state.next]
-  //   return Next ? <Next /> : null
-  // }, [routes, state])
 
   const navigate = useCallback((to: string) => {
     console.log('navigate', to)
@@ -114,102 +117,120 @@ export function NavigationController(props: {
 
   const animTranslate = useRef(new Animated.Value(0))
   const animOpacity = useRef(new Animated.Value(0))
-  const { width } = useWindowDimensions()
+  const { width, height } = useWindowDimensions()
+
+  const animations = useMemo(
+    () => ({
+      /* ***************** */
+      /* ***************** */
+      in: Animated.parallel([
+        Animated.timing(animTranslate.current, {
+          toValue: 1,
+          duration: 720,
+          easing: Easing.out(Easing.exp),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animOpacity.current, {
+          toValue: 1,
+          duration: 420,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]),
+      /* ***************** */
+      /* ***************** */
+      out: Animated.parallel([
+        Animated.timing(animTranslate.current, {
+          toValue: 2,
+          duration: 420,
+          easing: Easing.in(Easing.exp),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animOpacity.current, {
+          toValue: 0,
+          duration: 420,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]),
+      /* ***************** */
+      /* ***************** */
+      reset: (cb?: () => void) => {
+        animTranslate.current.stopAnimation(() => {
+          animTranslate.current.removeAllListeners()
+          animOpacity.current.stopAnimation(() => {
+            animOpacity.current.removeAllListeners()
+            animOpacity.current.setValue(0)
+            animTranslate.current.setValue(0)
+            cb?.()
+          })
+        })
+      },
+      /* ***************** */
+      /* ***************** */
+    }),
+    [],
+  )
 
   useEffect(() => {
     console.log('mount NavigationController')
-    Animated.parallel([
-      Animated.timing(animTranslate.current, {
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animOpacity.current, {
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-    ]).start()
+    animations.in.start()
+    return () => {
+      console.log('dismount NavigationController')
+    }
+    /* eslint-disable-next-line */
   }, [])
 
   useEffect(() => {
     if (!(state.queue.length > 1)) return
-    console.log('animate navigation', state)
-    Animated.parallel([
-      Animated.timing(animTranslate.current, {
-        toValue: 2,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animOpacity.current, {
-        toValue: 0,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {})
-  }, [state])
-
-  console.log('render NavigationController')
+    animations.out.start(() => {
+      animations.reset(() => {
+        dispatch({
+          type: 'shift',
+        })
+        animations.in.start()
+      })
+    })
+  }, [state, animations])
 
   return (
     <NavigationContext.Provider value={ctx}>
-      <View
+      <ImageBackground
         style={{
-          backgroundColor: 'red',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          backgroundColor: backgroundColor || 'rgba(0,0,0,0)',
+          flex: 1,
+          justifyContent: 'center',
+          width,
+          height,
         }}
-      />
-      <Animated.View
-        style={{
-          height: '100%',
-          width: '100%',
-          opacity: animOpacity.current,
-          transform: [
-            {
-              translateX: animTranslate.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [width, 0],
-              }),
-            },
-          ],
-        }}
+        resizeMode="cover"
+        source={backgroundImage ?? {}}
       >
-        {CurrentView}
-      </Animated.View>
+        <Animated.View
+          style={{
+            height: '100%',
+            width: '100%',
+            opacity: animOpacity.current,
+            transform: [
+              {
+                translateX: animTranslate.current.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [width, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          {CurrentView}
+        </Animated.View>
+      </ImageBackground>
     </NavigationContext.Provider>
   )
-  // return (
-  //   <View>
-  //     <Pressable
-  //       onPress={() => {
-  //         handleNavigation('/One')
-  //       }}
-  //     >
-  //       <Text>navigate</Text>
-  //     </Pressable>
-  //     <Pressable
-  //       onPress={() => {
-  //         getState()
-  //       }}
-  //     >
-  //       <Text>check</Text>
-  //     </Pressable>
-  //     <Pressable
-  //       onPress={() => {
-  //         getRoutes()
-  //       }}
-  //     >
-  //       <Text>routes</Text>
-  //     </Pressable>
-  //   </View>
-  // )
 }
 /* ************************************ */
 
 export const useNavigation = () => {
   const { navigate, to, get } = useContext(NavigationContext)
-
-  console.log('useNavigation')
   return {
     navigate,
     to,
