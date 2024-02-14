@@ -1,4 +1,10 @@
-import { type ComponentType, useReducer, useEffect } from 'react'
+import {
+  type ComponentType,
+  useReducer,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Pressable, Text, View } from 'react-native'
 
 type NavigationState = {
@@ -16,6 +22,7 @@ function navigationReducer(
 ) {
   switch (action.type) {
     case 'navigate': {
+      console.log('reducer navigate', action)
       return {
         ...state,
         next: action.to,
@@ -49,23 +56,27 @@ export const useNavigation = () => {
     initialState,
   )
 
-  const navigate = (to: string) => {
+  const navigate = useCallback((to: string) => {
+    console.log('navigate', to)
     dispatch({
       type: 'navigate',
       to,
     })
-  }
+  }, [])
 
-  // const to: () => RouteKeys = () => {
-  //   const entries = Object.entries(Routes).map(([k]) => [k, k])
-  //   return Object.fromEntries(entries)
-  // }
+  const to: Record<string, string> = useMemo(() => {
+    console.log('to', state)
+    const { routes } = state
+    const entries = Object.entries(routes).map(([k]) => [k, k])
+    console.log(entries)
+    return Object.fromEntries(entries)
+  }, [state])
 
-  const get = () => ({ ...state })
-
+  const get = useCallback(() => ({ ...state }), [state])
+  console.log('useNavigation')
   return {
     navigate,
-    // to,
+    to,
     get,
   }
 }
@@ -85,7 +96,7 @@ export function NavigationController(props: {
 
   useEffect(() => {
     if (state.current) return
-    console.log('init NavigationController')
+    console.log('init NavigationController', routes)
     dispatch({
       type: 'init',
       routes,
@@ -93,46 +104,41 @@ export function NavigationController(props: {
     })
   }, [initialRoute, routes, state])
 
-  function handleNavigation(to: string) {
-    dispatch({
-      type: 'navigate',
-      to,
-    })
-  }
+  const CurrentView = useMemo(() => {
+    const Current = routes[state.current]
+    return Current ? <Current /> : null
+  }, [routes, state])
 
-  function getState() {
-    console.log(state)
-  }
-
-  function getRoutes() {
-    console.log(getRoutes())
-  }
+  // useEffect(() => {
+  //   console.log(state)
+  // }, [state])
 
   console.log('render NavigationController')
 
-  return (
-    <View>
-      <Pressable
-        onPress={() => {
-          handleNavigation('/One')
-        }}
-      >
-        <Text>navigate</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          getState()
-        }}
-      >
-        <Text>check</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          getRoutes()
-        }}
-      >
-        <Text>routes</Text>
-      </Pressable>
-    </View>
-  )
+  return CurrentView
+  // return (
+  //   <View>
+  //     <Pressable
+  //       onPress={() => {
+  //         handleNavigation('/One')
+  //       }}
+  //     >
+  //       <Text>navigate</Text>
+  //     </Pressable>
+  //     <Pressable
+  //       onPress={() => {
+  //         getState()
+  //       }}
+  //     >
+  //       <Text>check</Text>
+  //     </Pressable>
+  //     <Pressable
+  //       onPress={() => {
+  //         getRoutes()
+  //       }}
+  //     >
+  //       <Text>routes</Text>
+  //     </Pressable>
+  //   </View>
+  // )
 }
