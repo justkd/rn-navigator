@@ -1,17 +1,21 @@
 import {
-  type ComponentType,
+  createContext,
+  useContext,
   useReducer,
   useEffect,
   useCallback,
   useMemo,
+  useRef,
 } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import {
+  Animated,
+  useWindowDimensions,
+  View,
+} from 'react-native'
 
 type NavigationState = {
-  current: string
-  next: string
+  queue: string[]
   payload: any
-  routes: Record<string, ComponentType>
 }
 
 /* ************************************ */
@@ -25,14 +29,15 @@ function navigationReducer(
       console.log('reducer navigate', action)
       return {
         ...state,
-        next: action.to,
+        queue: [...state.queue, action.to],
+        payload: action.payload ?? null,
       }
     }
     case 'init': {
+      console.log('reducer init', action)
       return {
         ...state,
-        current: action.initialRoute,
-        routes: action.routes,
+        queue: [action.initialRoute],
       }
     }
     default: {
@@ -42,46 +47,12 @@ function navigationReducer(
 }
 
 const initialState: NavigationState = {
-  current: '',
-  next: '',
+  queue: [],
   payload: null,
-  routes: {},
 }
 
 /* ************************************ */
-
-export const useNavigation = () => {
-  const [state, dispatch] = useReducer(
-    navigationReducer,
-    initialState,
-  )
-
-  const navigate = useCallback((to: string) => {
-    console.log('navigate', to)
-    dispatch({
-      type: 'navigate',
-      to,
-    })
-  }, [])
-
-  const to: Record<string, string> = useMemo(() => {
-    console.log('to', state)
-    const { routes } = state
-    const entries = Object.entries(routes).map(([k]) => [k, k])
-    console.log(entries)
-    return Object.fromEntries(entries)
-  }, [state])
-
-  const get = useCallback(() => ({ ...state }), [state])
-  console.log('useNavigation')
-  return {
-    navigate,
-    to,
-    get,
-  }
-}
-
-/* ************************************ */
+const NavigationContext = createContext<any>(null)
 
 export function NavigationController(props: {
   routes: any
@@ -96,26 +67,102 @@ export function NavigationController(props: {
 
   useEffect(() => {
     if (state.current) return
-    console.log('init NavigationController', routes)
+    console.log('init NavigationController')
     dispatch({
       type: 'init',
-      routes,
       initialRoute,
     })
-  }, [initialRoute, routes, state])
+  }, [initialRoute, state])
+
+  useEffect(() => {
+    if (!state.current) return
+    console.log('updated', state)
+  }, [state])
 
   const CurrentView = useMemo(() => {
     const Current = routes[state.current]
     return Current ? <Current /> : null
   }, [routes, state])
 
-  // useEffect(() => {
-  //   console.log(state)
-  // }, [state])
+  // const NextView = useMemo(() => {
+  //   const Next = routes[state.next]
+  //   return Next ? <Next /> : null
+  // }, [routes, state])
+
+  const navigate = useCallback((to: string) => {
+    console.log('navigate', to)
+    dispatch({
+      type: 'navigate',
+      to,
+    })
+  }, [])
+
+  const to: Record<string, string> = useMemo(() => {
+    const entries = Object.entries(routes).map(([k]) => [k, k])
+    return Object.fromEntries(entries)
+  }, [routes])
+
+  const get = useCallback(() => ({ ...state }), [state])
+
+  const ctx = useMemo(
+    () => ({ navigate, to, get }),
+    [navigate, to, get],
+  )
+
+  const animTranslate = useRef(new Animated.Value(0))
+  const animOpacity = useRef(new Animated.Value(0))
+  const { width } = useWindowDimensions()
+
+  useEffect(() => {
+    console.log('mount NavigationController')
+    Animated.timing(animTranslate.current, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start()
+    Animated.timing(animOpacity.current, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start()
+  }, [])
+
+  useEffect(() => {
+    if (!state.next) return
+    console.log('animate navigation', state)
+  }, [state])
 
   console.log('render NavigationController')
 
-  return CurrentView
+  return (
+    <NavigationContext.Provider value={ctx}>
+      <View
+        style={{
+          backgroundColor: 'red',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      />
+      <Animated.View
+        style={{
+          height: '100%',
+          width: '100%',
+          opacity: animOpacity.current,
+          transform: [
+            {
+              translateX: animTranslate.current.interpolate({
+                inputRange: [0, 1],
+                outputRange: [width, 0],
+              }),
+            },
+          ],
+        }}
+      >
+        {CurrentView}
+      </Animated.View>
+    </NavigationContext.Provider>
+  )
   // return (
   //   <View>
   //     <Pressable
@@ -141,4 +188,16 @@ export function NavigationController(props: {
   //     </Pressable>
   //   </View>
   // )
+}
+/* ************************************ */
+
+export const useNavigation = () => {
+  const { navigate, to, get } = useContext(NavigationContext)
+
+  console.log('useNavigation')
+  return {
+    navigate,
+    to,
+    get,
+  }
 }
