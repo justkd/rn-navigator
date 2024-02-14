@@ -16,9 +16,17 @@ import {
   type ImageSourcePropType,
 } from 'react-native'
 
+/* ************************************ */
+
 type NavigationState = {
   queue: string[]
   payload: any
+}
+
+type ContextType = {
+  navigate: (to: string) => void
+  to: Record<string, string>
+  get: () => NavigationState
 }
 
 /* ************************************ */
@@ -55,13 +63,24 @@ function navigationReducer(
   }
 }
 
+/* ************************************ */
+
 const initialState: NavigationState = {
   queue: [],
   payload: null,
 }
 
 /* ************************************ */
-const NavigationContext = createContext<any>(null)
+
+const NavigationContext = createContext<ContextType>(null as any)
+
+export const useNavigation = () => {
+  const ctx = NavigationContext
+  const { navigate, to, get } = useContext(ctx) || {}
+  return { navigate, to, get }
+}
+
+/* ************************************ */
 
 export function NavigationController(props: {
   routes: any
@@ -81,14 +100,9 @@ export function NavigationController(props: {
     initialState,
   )
 
-  useEffect(() => {
-    if (state.queue.length) return
-    console.log('init NavigationController')
-    dispatch({
-      type: 'init',
-      initialRoute,
-    })
-  }, [initialRoute, state])
+  const animTranslate = useRef(new Animated.Value(0))
+  const animOpacity = useRef(new Animated.Value(0))
+  const { width, height } = useWindowDimensions()
 
   const CurrentView = useMemo(() => {
     const Current = routes[state.queue[0]]
@@ -97,10 +111,7 @@ export function NavigationController(props: {
 
   const navigate = useCallback((to: string) => {
     console.log('navigate', to)
-    dispatch({
-      type: 'navigate',
-      to,
-    })
+    dispatch({ type: 'navigate', to })
   }, [])
 
   const to: Record<string, string> = useMemo(() => {
@@ -114,10 +125,6 @@ export function NavigationController(props: {
     () => ({ navigate, to, get }),
     [navigate, to, get],
   )
-
-  const animTranslate = useRef(new Animated.Value(0))
-  const animOpacity = useRef(new Animated.Value(0))
-  const { width, height } = useWindowDimensions()
 
   const animations = useMemo(
     () => ({
@@ -173,25 +180,41 @@ export function NavigationController(props: {
   )
 
   useEffect(() => {
-    console.log('mount NavigationController')
-    animations.in.start()
-    return () => {
-      console.log('dismount NavigationController')
-    }
-    /* eslint-disable-next-line */
-  }, [])
+    // init NavigationController
+    if (state.queue.length) return
+    console.log('init NavigationController')
+    dispatch({
+      type: 'init',
+      initialRoute,
+    })
+  }, [initialRoute, state])
 
   useEffect(() => {
+    // animate navigation
     if (!(state.queue.length > 1)) return
     animations.out.start(() => {
       animations.reset(() => {
-        dispatch({
-          type: 'shift',
-        })
+        dispatch({ type: 'shift' })
         animations.in.start()
       })
     })
   }, [state, animations])
+
+  useEffect(() => {
+    console.log('mount NavigationController')
+    // mount NavigationController
+    animations.in.start()
+    const anims = [animTranslate.current, animOpacity.current]
+    return () => {
+      console.log('dismount NavigationController')
+      anims.forEach((anim) => {
+        anim.stopAnimation(() => {
+          anim.removeAllListeners()
+        })
+      })
+    }
+    /* eslint-disable-next-line */
+  }, [])
 
   return (
     <NavigationContext.Provider value={ctx}>
@@ -228,12 +251,3 @@ export function NavigationController(props: {
   )
 }
 /* ************************************ */
-
-export const useNavigation = () => {
-  const { navigate, to, get } = useContext(NavigationContext)
-  return {
-    navigate,
-    to,
-    get,
-  }
-}
