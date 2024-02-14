@@ -33,6 +33,13 @@ function navigationReducer(
         payload: action.payload ?? null,
       }
     }
+    case 'shift': {
+      console.log('reducer shift', action)
+      return {
+        ...state,
+        queue: state.queue.shift(),
+      }
+    }
     case 'init': {
       console.log('reducer init', action)
       return {
@@ -66,7 +73,7 @@ export function NavigationController(props: {
   )
 
   useEffect(() => {
-    if (state.current) return
+    if (state.queue.length) return
     console.log('init NavigationController')
     dispatch({
       type: 'init',
@@ -74,13 +81,9 @@ export function NavigationController(props: {
     })
   }, [initialRoute, state])
 
-  useEffect(() => {
-    if (!state.current) return
-    console.log('updated', state)
-  }, [state])
-
   const CurrentView = useMemo(() => {
-    const Current = routes[state.current]
+    const Current = routes[state.queue[0]]
+    console.log(state)
     return Current ? <Current /> : null
   }, [routes, state])
 
@@ -115,19 +118,31 @@ export function NavigationController(props: {
 
   useEffect(() => {
     console.log('mount NavigationController')
-    Animated.timing(animTranslate.current, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start()
-    Animated.timing(animOpacity.current, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start()
+    Animated.parallel([
+      Animated.timing(animTranslate.current, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animOpacity.current, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]).start()
   }, [])
 
   useEffect(() => {
-    if (!state.next) return
+    if (!(state.queue.length > 1)) return
     console.log('animate navigation', state)
+    Animated.parallel([
+      Animated.timing(animTranslate.current, {
+        toValue: 2,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animOpacity.current, {
+        toValue: 0,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {})
   }, [state])
 
   console.log('render NavigationController')
