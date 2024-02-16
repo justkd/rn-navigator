@@ -14,17 +14,42 @@ import {
   ImageBackground,
   useWindowDimensions,
   type ImageSourcePropType,
+  type ImageBackgroundProps,
 } from 'react-native'
 
 /* ************************************ */
 
+type NavigationBackground = {
+  color?: string
+  image?: {
+    source: ImageSourcePropType
+    resizeMode?: ImageBackgroundProps['resizeMode']
+    style?: ImageBackgroundProps['style']
+  }
+}
+
+type NavigationEvent = {
+  to: string
+  payload?: Record<string, any>
+  background?: NavigationBackground
+}
+
 type NavigationState = {
-  queue: string[]
-  payload: any
+  queue: NavigationEvent[]
+  background: NavigationBackground
 }
 
 type ContextType = {
-  navigate: (to: string) => void
+  navigate: (
+    to: string,
+    opts?: {
+      payload?: Record<string, any>
+      background?: {
+        color?: NavigationBackground['color']
+        image?: NavigationBackground['image']
+      }
+    },
+  ) => void
   to: Record<string, string>
   get: () => NavigationState
 }
@@ -33,20 +58,29 @@ type ContextType = {
 
 function navigationReducer(
   state: NavigationState,
-  action: { type: string } & Record<string, any>,
+  action: {
+    type: string
+    payload: string | NavigationEvent
+  },
 ) {
   switch (action.type) {
     case 'init': {
       return {
         ...state,
-        queue: [action.initialRoute],
+        queue: [{ to: action.payload as string }],
       }
     }
-    case 'navigate': {
+    // case 'navigate': {
+    //   return {
+    //     ...state,
+    //     queue: [...state.queue, action.payload.event],
+    //     payload: action.payload.event?.payload ?? null,
+    //   }
+    // }
+    case 'setBackground': {
       return {
         ...state,
-        queue: [...state.queue, action.to],
-        payload: action.payload ?? null,
+        background: (action.payload as any)?.background ?? {},
       }
     }
     case 'shift': {
@@ -67,7 +101,7 @@ function navigationReducer(
 
 const initialState: NavigationState = {
   queue: [],
-  payload: null,
+  background: {},
 }
 
 /* ************************************ */
@@ -105,14 +139,30 @@ export function NavigationController(props: {
   const { width, height } = useWindowDimensions()
 
   const CurrentView = useMemo(() => {
-    const Current = routes[state.queue[0]]
+    const Current = routes[state.queue[0]?.to]
     return Current ? <Current /> : null
   }, [routes, state])
 
-  const navigate = useCallback((to: string) => {
-    console.log('navigate', to)
-    dispatch({ type: 'navigate', to })
-  }, [])
+  const navigate = useCallback(
+    (
+      to: string,
+      opts?: {
+        payload?: Record<string, any>
+        background?: {
+          color?: NavigationBackground['color']
+          image?: NavigationBackground['image']
+        }
+      },
+    ) => {
+      console.log('navigate', to)
+      dispatch({
+        type: 'setBackground',
+        payload: { background: opts?.background },
+      })
+      dispatch({ type: 'navigate', payload: { to } })
+    },
+    [],
+  )
 
   const to: Record<string, string> = useMemo(() => {
     const entries = Object.entries(routes).map(([k]) => [k, k])
