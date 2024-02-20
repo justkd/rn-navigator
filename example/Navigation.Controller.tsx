@@ -5,18 +5,17 @@ import {
   useMemo,
   useRef,
 } from 'react'
-
 import {
   Animated,
   ImageBackground,
   useWindowDimensions,
   type ImageSourcePropType,
 } from 'react-native'
+import { navigationReducer } from './Navigation.reducer'
 import { useNavigationAnimations } from './Navigation.animations'
+import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
 import type { NavigationContextType } from './Navigation.types'
-import { navigationReducer } from './Navigation.reducer'
-import { useNavigationHooks } from './Navigation.hooks'
 
 /* ************************************ */
 
