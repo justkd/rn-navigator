@@ -9,7 +9,7 @@ export function Example() {
       routes={Routes}
       initialRoute="/Home"
       backgroundColor="black"
-      backgroundImage={PlaceholderImage}
+      // backgroundImage={PlaceholderImage}
     />
   )
 }
