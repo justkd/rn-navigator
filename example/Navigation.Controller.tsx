@@ -60,7 +60,7 @@ function navigationReducer(
   state: NavigationState,
   action: {
     type: string
-    payload: string | NavigationEvent
+    payload?: string | NavigationEvent
   },
 ) {
   switch (action.type) {
@@ -70,13 +70,17 @@ function navigationReducer(
         queue: [{ to: action.payload as string }],
       }
     }
-    // case 'navigate': {
-    //   return {
-    //     ...state,
-    //     queue: [...state.queue, action.payload.event],
-    //     payload: action.payload.event?.payload ?? null,
-    //   }
-    // }
+    case 'navigate': {
+      return {
+        ...state,
+        queue: [...state.queue, action?.payload],
+        payload:
+          typeof action.payload !== 'string' &&
+          typeof action.payload !== 'undefined'
+            ? action.payload?.payload
+            : null,
+      }
+    }
     case 'setBackground': {
       return {
         ...state,
@@ -157,7 +161,7 @@ export function NavigationController(props: {
       console.log('navigate', to)
       dispatch({
         type: 'setBackground',
-        payload: { background: opts?.background },
+        payload: { background: opts?.background, to: '' },
       })
       dispatch({ type: 'navigate', payload: { to } })
     },
@@ -235,7 +239,7 @@ export function NavigationController(props: {
     console.log('init NavigationController')
     dispatch({
       type: 'init',
-      initialRoute,
+      payload: initialRoute,
     })
   }, [initialRoute, state])
 
