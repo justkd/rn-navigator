@@ -71,15 +71,17 @@ function navigationReducer(
       }
     }
     case 'navigate': {
-      return {
-        ...state,
-        queue: [...state.queue, action?.payload],
-        payload:
-          typeof action.payload !== 'string' &&
-          typeof action.payload !== 'undefined'
-            ? action.payload?.payload
-            : null,
-      }
+      const event =
+        action?.payload && typeof action?.payload !== 'string'
+          ? action?.payload
+          : null
+      return event
+        ? {
+            ...state,
+            queue: [...state.queue, event],
+            payload: event.payload ?? null,
+          }
+        : state
     }
     case 'setBackground': {
       return {
@@ -187,14 +189,14 @@ export function NavigationController(props: {
       in: Animated.parallel([
         Animated.timing(animTranslate.current, {
           toValue: 1,
-          duration: 720,
+          duration: 420,
           easing: Easing.out(Easing.exp),
           useNativeDriver: true,
         }),
         Animated.timing(animOpacity.current, {
           toValue: 1,
           duration: 420,
-          easing: Easing.inOut(Easing.ease),
+          easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
       ]),
