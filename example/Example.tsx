@@ -7,11 +7,11 @@ export function Example() {
   console.log('render Example')
   return (
     <NavigationController
-      routes={navigationRoutes}
       initialRoute="/Home"
       backgroundColor="cyan"
-      // backgroundImage={SuperCat}
+      routes={navigationRoutes}
       backgrounds={navigationBackgrounds}
+      // backgroundImage={SuperCat}
     />
   )
 }

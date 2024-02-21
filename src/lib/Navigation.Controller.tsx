@@ -17,23 +17,8 @@ import { navigationReducer } from './Navigation.reducer'
 import { useNavigationAnimations } from './Navigation.animations'
 import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
-import type {
-  NavigationBackground,
-  NavigationContextType,
-} from './Navigation.types'
 import { NavigationErrorView } from './Navigation.ErrorView'
-
-/* ************************************ */
-
-// type NCT = NavigationContextType
-// const NavigationContext = createContext<unknown>(null as any)
-
-// export const useNavigation = () => {
-//   const ctx = NavigationContext
-//   return useContext(ctx)
-// }
-
-/* ************************************ */
+import type { NavigationContextType } from './Navigation.types'
 
 export function getNavigationController<R, B>() {
   type NCT = NavigationContextType<keyof R, keyof B>
@@ -87,7 +72,7 @@ export function getNavigationController<R, B>() {
         state,
         dispatch,
         anims.translateLTR,
-        initialRoute,
+        String(initialRoute),
         animT,
         animO,
       )
