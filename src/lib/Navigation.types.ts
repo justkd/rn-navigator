@@ -1,10 +1,11 @@
 import type {
   ImageSourcePropType,
   ImageBackgroundProps,
+  ViewStyle,
 } from 'react-native'
 
 export type NavigationBackground = {
-  color?: string
+  color?: ViewStyle['backgroundColor']
   image?: {
     source: ImageSourcePropType
     resizeMode?: ImageBackgroundProps['resizeMode']
@@ -15,25 +16,26 @@ export type NavigationBackground = {
 export type NavigationEvent = {
   to: string
   payload?: Record<string, any>
-  background?: NavigationBackground
+  background?: string
 }
 
 export type NavigationState = {
   queue: NavigationEvent[]
-  background: NavigationBackground
+  background?: string
 }
 
-export type NavigationContextType = {
+export type NavigationContextType<
+  R extends string | number | symbol,
+  B extends string | number | symbol,
+> = {
   navigate: (
-    to: string,
+    to: R,
     opts?: {
       payload?: Record<string, any>
-      background?: {
-        color?: NavigationBackground['color']
-        image?: NavigationBackground['image']
-      }
+      background?: string
     },
   ) => void
-  to: Record<string, string>
   get: () => NavigationState
+  to: Record<R, R>
+  bg: Record<B, B>
 }

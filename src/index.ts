@@ -1,2 +1,5 @@
-export type { DummyType } from './lib'
-export { dummyfn } from './lib'
+export {
+  getTypedBackgrounds,
+  getTypedRoutes,
+} from './lib/Navigation.getters'
+export { getNavigationController } from './lib/Navigation.Controller'

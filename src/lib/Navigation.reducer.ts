@@ -22,19 +22,18 @@ export function navigationReducer(
         action?.payload && typeof action?.payload !== 'string'
           ? action?.payload
           : null
+      const background =
+        typeof action.payload !== 'string'
+          ? action.payload?.background
+          : undefined
       return event
         ? {
             ...state,
+            background,
             queue: [...state.queue, event],
-            payload: event.payload ?? null,
+            payload: event.payload?.opts?.payload ?? null,
           }
         : state
-    }
-    case 'setBackground': {
-      return {
-        ...state,
-        background: (action.payload as any)?.background ?? {},
-      }
     }
     case 'shift': {
       const queue = [...state.queue]

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useEffect } from 'react'
-import { useNavigation } from '../Navigation.Controller'
+import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 export function Home() {
   const label = '/Home'
-  const { navigate, to } = useNavigation()
+  const { navigate, to, bg } = useNavigation()
   useEffect(() => {
     console.log('mount home')
     return () => {
@@ -28,7 +28,7 @@ export function Home() {
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigate(to['/One'])
+          navigate(to['/One'], { background: bg.one })
         }}
       >
         <Text style={styles.text}>{label}</Text>

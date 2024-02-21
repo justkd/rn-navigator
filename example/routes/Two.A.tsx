@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { useNavigation } from '../Navigation.Controller'
+import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
   container: {
