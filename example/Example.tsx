@@ -1,5 +1,5 @@
 import { getNavigationController } from './Navigation.Controller'
-import { Routes } from './Navigation.Routes'
+import { Routes } from './Navigation.routes'
 import SuperCat from './supercat.jpg'
 import { navigationBackgrounds } from './Navigation.backgrounds'
 
