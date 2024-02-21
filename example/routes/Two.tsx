@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { useNavigation } from '../Navigation.Controller'
-import { navigationBackgroundKeys } from '../Navigation.backgrounds'
+import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
   container: {
@@ -18,8 +17,7 @@ const styles = StyleSheet.create({
 
 export function Two() {
   const label = '/Two'
-  const { navigate, to } = useNavigation()
-  const bg = navigationBackgroundKeys
+  const { navigate, to, bg } = useNavigation()
   useEffect(() => {
     console.log('mount two')
     return () => {

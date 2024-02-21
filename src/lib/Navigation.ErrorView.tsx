@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 
-export function TempErrorView() {
+export function NavigationErrorView() {
   return (
     <View
       style={{

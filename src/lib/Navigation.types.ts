@@ -3,7 +3,6 @@ import type {
   ImageBackgroundProps,
   ViewStyle,
 } from 'react-native'
-import { RouteKey } from './Navigation.routes'
 
 export type NavigationBackground = {
   color?: ViewStyle['backgroundColor']
@@ -25,14 +24,18 @@ export type NavigationState = {
   background?: string
 }
 
-export type NavigationContextType = {
+export type NavigationContextType<
+  R extends string | number | symbol,
+  B extends string | number | symbol,
+> = {
   navigate: (
-    to: RouteKey,
+    to: R,
     opts?: {
       payload?: Record<string, any>
       background?: string
     },
   ) => void
-  to: Record<RouteKey, RouteKey>
   get: () => NavigationState
+  to: Record<R, R>
+  bg: Record<B, B>
 }
