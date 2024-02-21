@@ -28,9 +28,7 @@ export function Home() {
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigate(to['/One'], {
-            background: bg.one,
-          })
+          navigate(to['/One'], { background: bg.one })
         }}
       >
         <Text style={styles.text}>{label}</Text>

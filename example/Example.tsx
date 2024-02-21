@@ -1,7 +1,7 @@
 import { NavigationController } from './Navigation'
 import { navigationRoutes } from './Navigation.routes'
 import { navigationBackgrounds } from './Navigation.backgrounds'
-import SuperCat from './supercat.jpg'
+// import SuperCat from './supercat.jpg'
 
 export function Example() {
   console.log('render Example')
@@ -9,8 +9,8 @@ export function Example() {
     <NavigationController
       routes={navigationRoutes}
       initialRoute="/Home"
-      backgroundColor="black"
-      backgroundImage={SuperCat}
+      backgroundColor="cyan"
+      // backgroundImage={SuperCat}
       backgrounds={navigationBackgrounds}
     />
   )

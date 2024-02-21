@@ -46,7 +46,7 @@ export function getNavigationController<R, B>() {
 
     NavigationController(props: {
       routes: Record<keyof R, ComponentType>
-      initialRoute: string
+      initialRoute: keyof R
       backgroundColor?: ViewStyle['backgroundColor']
       backgroundImage?: ImageSourcePropType
       backgrounds?: B
