@@ -1,15 +1,19 @@
-import { NavigationController } from './Navigation.Controller'
+import { getNavigationController } from './Navigation.Controller'
 import { Routes } from './Navigation.Routes'
-import PlaceholderImage from './placeholder_image.png'
+import SuperCat from './supercat.jpg'
+import { navigationBackgrounds } from './Navigation.backgrounds'
 
 export function Example() {
   console.log('render Example')
+  const NavigationController =
+    getNavigationController<typeof navigationBackgrounds>()
   return (
     <NavigationController
       routes={Routes}
       initialRoute="/Home"
       backgroundColor="black"
-      // backgroundImage={PlaceholderImage}
+      backgroundImage={SuperCat}
+      backgrounds={navigationBackgrounds}
     />
   )
 }

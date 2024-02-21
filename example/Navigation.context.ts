@@ -1,12 +1,16 @@
-import { useCallback, useMemo, type Dispatch } from 'react'
+import {
+  useCallback,
+  useMemo,
+  type Dispatch,
+  type ComponentType,
+} from 'react'
 import type {
-  NavigationBackground,
   NavigationState,
   NavigationEvent,
 } from './Navigation.types'
 
 export const useNavigationContext = (
-  routes: NavigationState,
+  routes: Record<string, ComponentType>,
   state: NavigationState,
   dispatch: Dispatch<{
     type: string
@@ -18,23 +22,23 @@ export const useNavigationContext = (
       to: string,
       opts?: {
         payload?: Record<string, any>
-        background?: {
-          color?: NavigationBackground['color']
-          image?: NavigationBackground['image']
-        }
+        background?: string
       },
     ) => {
       console.log('navigate', to)
       dispatch({
-        type: 'setBackground',
-        payload: { background: opts?.background, to: '' },
+        type: 'navigate',
+        payload: {
+          to,
+          payload: opts?.payload,
+          background: opts?.background,
+        },
       })
-      dispatch({ type: 'navigate', payload: { to } })
     },
     [dispatch],
   )
 
-  const to: Record<string, string> = useMemo(() => {
+  const to = useMemo(() => {
     const entries = Object.entries(routes).map(([k]) => [k, k])
     return Object.fromEntries(entries)
   }, [routes])
@@ -42,7 +46,11 @@ export const useNavigationContext = (
   const get = useCallback(() => ({ ...state }), [state])
 
   const ctx = useMemo(
-    () => ({ navigate, to, get }),
+    () => ({
+      navigate,
+      to,
+      get,
+    }),
     [navigate, to, get],
   )
 

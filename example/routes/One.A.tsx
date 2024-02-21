@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useNavigation } from '../Navigation.Controller'
+import { navigationBackgroundKeys } from '../Navigation.backgrounds'
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
 export function OneA() {
   const label = '/One/A'
   const { navigate, to } = useNavigation()
+  const bg = navigationBackgroundKeys
   useEffect(() => {
     console.log('mount one/a')
     return () => {
@@ -28,7 +30,9 @@ export function OneA() {
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigate(to['/Two'])
+          navigate(to['/Two'], {
+            background: bg.two,
+          })
         }}
       >
         <Text style={styles.text}>{label}</Text>

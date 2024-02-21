@@ -1,4 +1,4 @@
-import { getTypedRoutes } from './getTypedRoutes'
+import { getTypedRoutes } from './Navigation.getters'
 import { Home } from './routes/Home'
 import { One } from './routes/One'
 import { OneA } from './routes/One.A'
