@@ -81,15 +81,12 @@ export function getNavigationController<R, B>() {
         B
       >(state, dispatch, routes, backgrounds)
 
-      const { animations } = useNavigationAnimations(
-        animT,
-        animO,
-      )
+      const anims = useNavigationAnimations(animT, animO)
 
       useNavigationHooks(
         state,
         dispatch,
-        animations,
+        anims.translateLTR,
         initialRoute,
         animT,
         animO,

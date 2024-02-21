@@ -6,7 +6,7 @@ export const useNavigationAnimations = (
   animOpacity: MutableRefObject<Animated.Value>,
 ) => {
   const baseDuration = 420
-  const animations = useMemo(
+  const translateLTR = useMemo(
     () => ({
       /* ***************** */
       /* ***************** */
@@ -14,13 +14,13 @@ export const useNavigationAnimations = (
         Animated.timing(animTranslate.current, {
           toValue: 1,
           duration: baseDuration,
-          easing: Easing.out(Easing.exp),
+          easing: Easing.in(Easing.exp),
           useNativeDriver: true,
         }),
         Animated.timing(animOpacity.current, {
           toValue: 1,
           duration: baseDuration,
-          easing: Easing.out(Easing.ease),
+          easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
       ]),
@@ -29,15 +29,13 @@ export const useNavigationAnimations = (
       out: Animated.parallel([
         Animated.timing(animTranslate.current, {
           toValue: 2,
-          duration: baseDuration * 1.5,
-          delay: baseDuration / 3,
+          duration: baseDuration,
           easing: Easing.in(Easing.exp),
           useNativeDriver: true,
         }),
         Animated.timing(animOpacity.current, {
           toValue: 0,
           duration: baseDuration,
-          delay: baseDuration / 2,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
@@ -60,5 +58,5 @@ export const useNavigationAnimations = (
     }),
     [animOpacity, animTranslate],
   )
-  return { animations }
+  return { translateLTR }
 }
