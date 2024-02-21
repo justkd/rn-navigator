@@ -1,7 +1,7 @@
 import { getNavigationController } from './Navigation.Controller'
 import { Routes } from './Navigation.routes'
-import SuperCat from './supercat.jpg'
 import { navigationBackgrounds } from './Navigation.backgrounds'
+import SuperCat from './supercat.jpg'
 
 export function Example() {
   console.log('render Example')
