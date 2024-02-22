@@ -19,8 +19,10 @@ import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
 import { NavigationErrorView } from './Navigation.ErrorView'
 import type { NavigationContextType } from './Navigation.types'
+import { backToken } from './Navigation.back.token'
 
 export function getNavigationController<R, B>() {
+  type UserRouteKey = keyof Omit<R, typeof backToken>
   type NCT = NavigationContextType<keyof R, keyof B>
   const NavigationContext = createContext<NCT>(null as any)
   return {
@@ -30,8 +32,8 @@ export function getNavigationController<R, B>() {
     },
 
     NavigationController(props: {
-      routes: Record<keyof R, ComponentType>
-      initialRoute: keyof R
+      routes: Record<UserRouteKey, ComponentType>
+      initialRoute: UserRouteKey
       backgroundColor?: ViewStyle['backgroundColor']
       backgroundImage?: ImageSourcePropType
       backgrounds?: B
