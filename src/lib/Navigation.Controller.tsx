@@ -47,13 +47,14 @@ export function getNavigationController<R, B>() {
       const reducer = navigationReducer
       const [state, dispatch] = useReducer(reducer, {
         queue: [],
+        history: [],
         background: undefined,
       })
 
       const CurrentView = useMemo(() => {
+        const key = state.queue[0]?.to
         const Current =
-          (routes as any)[state.queue[0]?.to] ||
-          NavigationErrorView
+          (routes as any)[key] || NavigationErrorView
         return Current ? <Current /> : null
       }, [routes, state])
 

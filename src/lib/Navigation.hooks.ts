@@ -8,6 +8,7 @@ import type {
   NavigationState,
   NavigationEvent,
 } from './Navigation.types'
+import { backToken } from './Navigation.back.token'
 
 export const useNavigationHooks = (
   state: NavigationState,
@@ -35,11 +36,21 @@ export const useNavigationHooks = (
   }, [initialRoute, state, dispatch])
 
   useEffect(() => {
-    // animate navigation
+    // animate navigation forward
     if (!(state.queue.length > 1)) return
+    // animate back nav event
+    if (state.queue[1].to === backToken) {
+      animations.out.start(() => {
+        animations.reset(() => {
+          dispatch({ type: 'go_back' })
+          animations.in.start()
+        })
+      })
+      return
+    }
     animations.out.start(() => {
       animations.reset(() => {
-        dispatch({ type: 'shift' })
+        dispatch({ type: 'go_forward' })
         animations.in.start()
       })
     })

@@ -1,10 +1,12 @@
+import { backToken } from './Navigation.back.token'
+
 export const getTypedRoutes = <T extends Record<any, any>>(
   routes: T,
 ) => {
-  const navigationRouteKeyss = Object.fromEntries(
-    Object.keys(routes).map((k) => [k, k]),
-  ) as Record<keyof T, keyof T>
-  return { navigationRouteKeyss, navigationRoutes: routes }
+  const entries = Object.entries(routes)
+  const $entries = [...entries, [backToken, () => {}]]
+  const $routes = Object.fromEntries($entries) as T
+  return { navigationRoutes: $routes }
 }
 
 export const getTypedBackgrounds = <T extends Record<any, any>>(
@@ -23,10 +25,15 @@ export const getTypedRouteKeys = <T extends readonly string[]>(
   arr: T,
 ) => {
   const entries = arr.map((k) => [k, k])
-  const keys = Object.fromEntries(entries)
+  const $entries = [...entries, [backToken, () => {}]]
+  const keys = Object.fromEntries($entries)
+  const back = Object.fromEntries([
+    [backToken, backToken],
+  ]) as Record<typeof backToken, typeof backToken>
   const navigationRouteKeys = keys as Record<
     T[number],
     T[number]
-  >
+  > &
+    typeof back
   return { navigationRouteKeys }
 }

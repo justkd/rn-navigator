@@ -1,14 +1,9 @@
-import {
-  useCallback,
-  useMemo,
-  type Dispatch,
-  type ComponentType,
-} from 'react'
+import { useCallback, useMemo, type Dispatch } from 'react'
 import type {
   NavigationState,
   NavigationEvent,
-  NavigationBackground,
 } from './Navigation.types'
+import { backToken } from './Navigation.back.token'
 
 export const useNavigationContext = <R, B>(
   state: NavigationState,
@@ -52,16 +47,24 @@ export const useNavigationContext = <R, B>(
     return Object.fromEntries(entries)
   }, [backgrounds])
 
-  const get = useCallback(() => ({ ...state }), [state])
+  const peek = useCallback(() => {
+    const peeked = { ...state }
+    Object.freeze(peeked)
+    Object.seal(peeked)
+    return peeked
+  }, [state])
+
+  const back = useMemo(() => backToken, [])
 
   const ctx = useMemo(
     () => ({
       navigate,
-      get,
+      peek,
       to,
       bg,
+      back,
     }),
-    [navigate, get, to, bg],
+    [navigate, peek, to, bg, back],
   )
 
   return { ctx }
