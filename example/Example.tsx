@@ -1,6 +1,8 @@
-import { NavigationController } from './Navigation'
-import { navigationRoutes } from './Navigation.routes'
-import { navigationBackgrounds } from './Navigation.backgrounds'
+import {
+  NavigationController,
+  navigationRoutes,
+  navigationBackgrounds,
+} from './Navigation'
 // import SuperCat from './supercat.jpg'
 
 export function Example() {

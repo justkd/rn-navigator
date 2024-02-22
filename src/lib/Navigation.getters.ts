@@ -1,7 +1,32 @@
-export const getTypedRoutes = <T>(routes: T) => ({
-  navigationRoutes: routes,
-})
+export const getTypedRoutes = <T extends Record<any, any>>(
+  routes: T,
+) => {
+  const navigationRouteKeyss = Object.fromEntries(
+    Object.keys(routes).map((k) => [k, k]),
+  ) as Record<keyof T, keyof T>
+  return { navigationRouteKeyss, navigationRoutes: routes }
+}
 
-export const getTypedBackgrounds = <T>(bgs: T) => ({
-  navigationBackgrounds: bgs,
-})
+export const getTypedBackgrounds = <T extends Record<any, any>>(
+  backgrounds: T,
+) => {
+  const navigationBackgroundKeys = Object.fromEntries(
+    Object.keys(backgrounds).map((k) => [k, k]),
+  ) as Record<keyof T, keyof T>
+  return {
+    navigationBackgroundKeys,
+    navigationBackgrounds: backgrounds,
+  }
+}
+
+export const getTypedRouteKeys = <T extends readonly string[]>(
+  arr: T,
+) => {
+  const entries = arr.map((k) => [k, k])
+  const keys = Object.fromEntries(entries)
+  const navigationRouteKeys = keys as Record<
+    T[number],
+    T[number]
+  >
+  return { navigationRouteKeys }
+}
