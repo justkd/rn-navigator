@@ -40,6 +40,9 @@ export const useNavigationHooks = (
     if (!(state.queue.length > 1)) return
     // animate back nav event
     if (state.queue[1].to === backToken) {
+      /**
+       * ON DECK: CHANGE THIS TO BACK ANIMATION
+       */
       animations.out.start(() => {
         animations.reset(() => {
           dispatch({ type: 'go_back' })
