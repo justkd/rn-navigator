@@ -1,16 +1,13 @@
 import { getTypedRouteKeys } from '../../src'
+import { backToken } from '../../src/lib/Navigation.back.token'
 
-const routeKeys = [
-  '/Home',
+type GetTypedRouteKeys<T> = Omit<T, typeof backToken>
 
-  '/One',
-  '/One/A',
-
-  '/Two',
-  '/Two/A',
-] as const
+const routeKeys = ['/Home', '/A', '/B', '/C', '/Last'] as const
 
 export const { navigationRouteKeys } =
   getTypedRouteKeys<typeof routeKeys>(routeKeys)
 
-export type NavigationRouteKey = keyof typeof navigationRouteKeys
+export type NavigationRouteKey = keyof GetTypedRouteKeys<
+  typeof navigationRouteKeys
+>

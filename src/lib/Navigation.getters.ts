@@ -5,7 +5,7 @@ export const getTypedRoutes = <T extends Record<any, any>>(
 ) => {
   const entries = Object.entries(routes)
   const $entries = [...entries, [backToken, () => {}]]
-  const $routes = Object.fromEntries($entries)
+  const $routes = Object.fromEntries($entries) as T
   return { navigationRoutes: $routes }
 }
 
@@ -27,7 +27,9 @@ export const getTypedRouteKeys = <T extends readonly string[]>(
   const entries = arr.map((k) => [k, k])
   const $entries = [...entries, [backToken, () => {}]]
   const keys = Object.fromEntries($entries)
-  const back = Object.fromEntries([[backToken, backToken]])
+  const back = Object.fromEntries([
+    [backToken, backToken],
+  ]) as Record<typeof backToken, typeof backToken>
   const navigationRouteKeys = keys as Record<
     T[number],
     T[number]

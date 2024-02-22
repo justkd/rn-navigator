@@ -1,8 +1,7 @@
 import { type ComponentType } from 'react'
-import { getTypedRoutes } from '../../src'
 import { type NavigationRouteKey } from './Navigation.keys'
+import { getTypedRoutes } from '../../src'
 import { Templates } from '../routes/Templates'
-
 /* ******************** */
 
 const routes: Record<NavigationRouteKey, ComponentType> = {
@@ -11,7 +10,7 @@ const routes: Record<NavigationRouteKey, ComponentType> = {
   '/B': Templates[2],
   '/C': Templates[3],
   '/Last': Templates[4],
-} as const
+}
 
 export const { navigationRoutes } =
   getTypedRoutes<typeof routes>(routes)
