@@ -12,3 +12,5 @@ const routeKeys = [
 
 export const { navigationRouteKeys } =
   getTypedRouteKeys<typeof routeKeys>(routeKeys)
+
+export type NavigationRouteKey = keyof typeof navigationRouteKeys

@@ -3,6 +3,7 @@ import type {
   ImageBackgroundProps,
   ViewStyle,
 } from 'react-native'
+import { backToken } from './Navigation.back.token'
 
 export type NavigationBackground = {
   color?: ViewStyle['backgroundColor']
@@ -21,6 +22,7 @@ export type NavigationEvent = {
 
 export type NavigationState = {
   queue: NavigationEvent[]
+  history: NavigationEvent[]
   background?: string
 }
 
@@ -35,7 +37,8 @@ export type NavigationContextType<
       background?: string
     },
   ) => void
-  get: () => NavigationState
   to: Record<R, R>
   bg: Record<B, B>
+  back: typeof backToken
+  peek: () => NavigationState
 }

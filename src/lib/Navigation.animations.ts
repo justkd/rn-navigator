@@ -1,11 +1,11 @@
 import { useMemo, type MutableRefObject } from 'react'
 import { Animated, Easing } from 'react-native'
 
+export const navAnimBaseDur = 420
 export const useNavigationAnimations = (
   animTranslate: MutableRefObject<Animated.Value>,
   animOpacity: MutableRefObject<Animated.Value>,
 ) => {
-  const baseDuration = 420
   const translateLTR = useMemo(
     () => ({
       /* ***************** */
@@ -13,13 +13,13 @@ export const useNavigationAnimations = (
       in: Animated.parallel([
         Animated.timing(animTranslate.current, {
           toValue: 1,
-          duration: baseDuration,
+          duration: navAnimBaseDur,
           easing: Easing.in(Easing.exp),
           useNativeDriver: true,
         }),
         Animated.timing(animOpacity.current, {
           toValue: 1,
-          duration: baseDuration,
+          duration: navAnimBaseDur,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
@@ -29,13 +29,13 @@ export const useNavigationAnimations = (
       out: Animated.parallel([
         Animated.timing(animTranslate.current, {
           toValue: 2,
-          duration: baseDuration,
+          duration: navAnimBaseDur,
           easing: Easing.in(Easing.exp),
           useNativeDriver: true,
         }),
         Animated.timing(animOpacity.current, {
           toValue: 0,
-          duration: baseDuration,
+          duration: navAnimBaseDur,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),

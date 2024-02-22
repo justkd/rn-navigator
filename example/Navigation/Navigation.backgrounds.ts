@@ -10,11 +10,18 @@ import ImageFive from './assets/5.jpg'
 const backgrounds = {
   one: { image: { source: ImageOne } },
   two: { image: { source: ImageTwo } },
-  three: { image: { source: ImageThree } },
-  four: { image: { source: ImageFour } },
+  three: {
+    image: { source: ImageThree, resizeMode: 'contain' },
+  },
+  four: {
+    image: {
+      source: ImageFour,
+      style: { height: 400 },
+    },
+  },
   five: { image: { source: ImageFive } },
-  red: { color: 'red' },
   blue: { color: 'blue' },
+  green: { color: 'green' },
 }
 
 export const {

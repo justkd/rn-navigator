@@ -1,25 +1,16 @@
 import { type ComponentType } from 'react'
 import { getTypedRoutes } from '../../src'
-import { navigationRouteKeys } from './Navigation.keys'
-/* ******************** */
-import { Home } from '../routes/Home'
-import { One } from '../routes/One'
-import { OneA } from '../routes/One.A'
-import { Two } from '../routes/Two'
-import { TwoA } from '../routes/Two.A'
+import { type NavigationRouteKey } from './Navigation.keys'
+import { Templates } from '../routes/Templates'
+
 /* ******************** */
 
-const routes: Record<
-  keyof typeof navigationRouteKeys,
-  ComponentType
-> = {
-  '/Home': Home,
-
-  '/One': One,
-  '/One/A': OneA,
-
-  '/Two': Two,
-  '/Two/A': TwoA,
+const routes: Record<NavigationRouteKey, ComponentType> = {
+  '/Home': Templates[0],
+  '/A': Templates[1],
+  '/B': Templates[2],
+  '/C': Templates[3],
+  '/Last': Templates[4],
 } as const
 
 export const { navigationRoutes } =
