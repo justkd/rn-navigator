@@ -3,7 +3,7 @@ import {
   navigationRoutes,
   navigationBackgrounds,
 } from './Navigation'
-// import ImageSix from './assets/6.jpg'
+// import DefaultBackgroundImage from './assets/DefaultBackgroundImage.jpg'
 
 export function Example() {
   console.log('render Example')
@@ -13,7 +13,7 @@ export function Example() {
       backgroundColor="cyan"
       routes={navigationRoutes}
       backgrounds={navigationBackgrounds}
-      // backgroundImage={SuperCat}
+      // backgroundImage={DefaultBackgroundImage}
     />
   )
 }
