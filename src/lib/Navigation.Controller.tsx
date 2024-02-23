@@ -64,10 +64,11 @@ export function getNavigationController<R, B>() {
       const animO = useRef(new Animated.Value(0))
 
       const { width, height } = useWindowDimensions()
+      const $routes = routes as Record<keyof R, ComponentType>
       const { ctx } = useNavigationContext<
         Record<keyof R, ComponentType>,
         B
-      >(state, dispatch, routes, backgrounds)
+      >(state, dispatch, $routes, backgrounds)
 
       const anims = useNavigationAnimations(animT, animO)
 

@@ -24,12 +24,6 @@ export function Template(props: {
   const { label, index } = props
   const { navigate, to, bg, back } = useNavigation()
   const [test, setTest] = useState('')
-  useEffect(() => {
-    console.log(`mount ${label}`)
-    return () => {
-      console.log(`dismount ${label}`)
-    }
-  }, [label])
   const next = useMemo(
     () => ({
       route: (() => {
@@ -47,12 +41,18 @@ export function Template(props: {
     }),
     [to, bg, index],
   )
+  // ADD PAYLOAD STUFF - RETRIEVE IN PAYLOAD WITH USENAVIGATION
   return (
     <View style={styles.container}>
       <Pressable
         onPress={() => {
           navigate(next.route, {
             background: next.background,
+            payload: {
+              lastLabel: label,
+              rand: Math.random(),
+              test: () => console.log('test func'),
+            },
           })
         }}
       >

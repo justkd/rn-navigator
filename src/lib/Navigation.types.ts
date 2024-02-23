@@ -1,7 +1,7 @@
-import type {
-  ImageSourcePropType,
-  ImageBackgroundProps,
-  ViewStyle,
+import {
+  type ImageSourcePropType,
+  type ImageBackgroundProps,
+  type ViewStyle,
 } from 'react-native'
 import { backToken } from './Navigation.back.token'
 

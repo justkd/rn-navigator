@@ -4,9 +4,9 @@ import {
   type MutableRefObject,
 } from 'react'
 import { Animated } from 'react-native'
-import type {
-  NavigationState,
-  NavigationEvent,
+import {
+  type NavigationState,
+  type NavigationEvent,
 } from './Navigation.types'
 import { backToken } from './Navigation.back.token'
 
@@ -30,7 +30,6 @@ export const useNavigationHooks = (
   useEffect(() => {
     // init NavigationController
     if (state.queue.length) return
-    console.log('init NavigationController')
     dispatch({
       type: 'init',
       payload: initialRoute,
@@ -38,7 +37,6 @@ export const useNavigationHooks = (
   }, [initialRoute, state, dispatch])
 
   useEffect(() => {
-    // animate navigation forward
     if (!(state.queue.length > 1)) return
     // animate back nav event
     if (state.queue[1].to === backToken) {
@@ -50,6 +48,7 @@ export const useNavigationHooks = (
       })
       return
     }
+    // animate forward nav event
     animations.out.start(() => {
       animations.reset(() => {
         dispatch({ type: 'go_forward' })
@@ -59,12 +58,10 @@ export const useNavigationHooks = (
   }, [state, animations, dispatch])
 
   useEffect(() => {
-    console.log('mount NavigationController')
     // mount NavigationController
     animations.in.start()
     const anims = [animT.current, animO.current]
     return () => {
-      console.log('dismount NavigationController')
       anims.forEach((anim) => {
         anim.stopAnimation(() => {
           anim.removeAllListeners()

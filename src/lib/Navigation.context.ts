@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type Dispatch } from 'react'
-import type {
-  NavigationState,
-  NavigationEvent,
+import {
+  type NavigationState,
+  type NavigationEvent,
 } from './Navigation.types'
 import { backToken } from './Navigation.back.token'
 
@@ -22,7 +22,6 @@ export const useNavigationContext = <R, B>(
         background?: string
       },
     ) => {
-      console.log('navigate', to)
       dispatch({
         type: 'navigate',
         payload: {
