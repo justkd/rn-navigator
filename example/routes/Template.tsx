@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
@@ -23,6 +23,7 @@ export function Template(props: {
   const numExtraRoutes = 1
   const { label, index } = props
   const { navigate, to, bg, back } = useNavigation()
+  const [test, setTest] = useState('')
   useEffect(() => {
     console.log(`mount ${label}`)
     return () => {
@@ -59,10 +60,23 @@ export function Template(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          navigate(back)
+          navigate(back, {
+            background: (() => {
+              const bgs = [bg.black, bg.blue, bg.cyan]
+              const i = Math.floor(Math.random() * 100) % 3
+              return bgs[i]
+            })(),
+          })
         }}
       >
         <Text style={styles.text}>back</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          setTest('tested')
+        }}
+      >
+        <Text style={styles.text}>{test || 'test'}</Text>
       </Pressable>
     </View>
   )

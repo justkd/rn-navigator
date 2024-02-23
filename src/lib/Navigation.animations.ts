@@ -8,6 +8,39 @@ export const useNavigationAnimations = (
 ) => {
   const translateLTR = useMemo(
     () => ({
+      backIn: () => {
+        animTranslate.current.setValue(2)
+        return Animated.parallel([
+          Animated.timing(animTranslate.current, {
+            toValue: 1,
+            duration: navAnimBaseDur,
+            easing: Easing.in(Easing.exp),
+            useNativeDriver: true,
+          }),
+          Animated.timing(animOpacity.current, {
+            toValue: 1,
+            duration: navAnimBaseDur,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+        ])
+      },
+      /* ***************** */
+      /* ***************** */
+      backOut: Animated.parallel([
+        Animated.timing(animTranslate.current, {
+          toValue: -1,
+          duration: navAnimBaseDur,
+          easing: Easing.in(Easing.exp),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animOpacity.current, {
+          toValue: 0,
+          duration: navAnimBaseDur,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]),
       /* ***************** */
       /* ***************** */
       in: Animated.parallel([

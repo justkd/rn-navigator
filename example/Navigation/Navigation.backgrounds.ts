@@ -5,8 +5,8 @@ import ImageTwo from './assets/2.jpg'
 import ImageThree from './assets/3.jpg'
 import ImageFour from './assets/4.jpg'
 import ImageFive from './assets/5.jpg'
+import ImageSix from './assets/6.jpg'
 /* ******************** */
-
 const backgrounds = {
   one: { image: { source: ImageOne } },
   two: { image: { source: ImageTwo } },
@@ -17,8 +17,10 @@ const backgrounds = {
     image: { source: ImageFour },
   },
   five: { image: { source: ImageFive } },
+  six: { image: { source: ImageSix } },
+  black: { color: 'black' },
   blue: { color: 'blue' },
-  green: { color: 'green' },
+  cyan: { color: 'cyan' },
 }
 
 export const {

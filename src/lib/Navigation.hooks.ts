@@ -19,6 +19,8 @@ export const useNavigationHooks = (
   animations: {
     in: Animated.CompositeAnimation
     out: Animated.CompositeAnimation
+    backIn: () => Animated.CompositeAnimation
+    backOut: Animated.CompositeAnimation
     reset: (cb?: (() => void) | undefined) => void
   },
   initialRoute: string,
@@ -40,13 +42,10 @@ export const useNavigationHooks = (
     if (!(state.queue.length > 1)) return
     // animate back nav event
     if (state.queue[1].to === backToken) {
-      /**
-       * ON DECK: CHANGE THIS TO BACK ANIMATION
-       */
-      animations.out.start(() => {
+      animations.backOut.start(() => {
         animations.reset(() => {
           dispatch({ type: 'go_back' })
-          animations.in.start()
+          animations.backIn().start()
         })
       })
       return
