@@ -11,13 +11,10 @@ const backgrounds = {
   one: { image: { source: ImageOne } },
   two: { image: { source: ImageTwo } },
   three: {
-    image: { source: ImageThree, resizeMode: 'contain' },
+    image: { source: ImageThree },
   },
   four: {
-    image: {
-      source: ImageFour,
-      style: { height: 400 },
-    },
+    image: { source: ImageFour },
   },
   five: { image: { source: ImageFive } },
   blue: { color: 'blue' },

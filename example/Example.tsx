@@ -3,7 +3,7 @@ import {
   navigationRoutes,
   navigationBackgrounds,
 } from './Navigation'
-// import SuperCat from './supercat.jpg'
+// import ImageSix from './assets/6.jpg'
 
 export function Example() {
   console.log('render Example')
