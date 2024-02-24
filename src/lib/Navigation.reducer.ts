@@ -1,6 +1,6 @@
-import type {
-  NavigationState,
-  NavigationEvent,
+import {
+  type NavigationState,
+  type NavigationEvent,
 } from './Navigation.types'
 
 export function navigationReducer(

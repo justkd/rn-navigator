@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type Dispatch } from 'react'
-import type {
-  NavigationState,
-  NavigationEvent,
+import {
+  type NavigationState,
+  type NavigationEvent,
 } from './Navigation.types'
 import { backToken } from './Navigation.back.token'
 
@@ -22,7 +22,6 @@ export const useNavigationContext = <R, B>(
         background?: string
       },
     ) => {
-      console.log('navigate', to)
       dispatch({
         type: 'navigate',
         payload: {
@@ -56,6 +55,17 @@ export const useNavigationContext = <R, B>(
 
   const back = useMemo(() => backToken, [])
 
+  const payload = useCallback(
+    <T>(n?: number) => {
+      const $payload = !n
+        ? state.queue[0]
+        : [...state.history].reverse()[n - 1]
+      const load = $payload?.payload || null
+      return load ? (load as T) : null
+    },
+    [state.history, state.queue],
+  )
+
   const ctx = useMemo(
     () => ({
       navigate,
@@ -63,8 +73,11 @@ export const useNavigationContext = <R, B>(
       to,
       bg,
       back,
+      get: {
+        payload,
+      },
     }),
-    [navigate, peek, to, bg, back],
+    [navigate, peek, to, bg, back, payload],
   )
 
   return { ctx }

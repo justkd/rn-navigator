@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { useEffect, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
@@ -11,8 +11,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 30,
-    paddingVertical: '10%',
+    fontSize: 20,
   },
 })
 
@@ -22,13 +21,8 @@ export function Template(props: {
 }) {
   const numExtraRoutes = 1
   const { label, index } = props
-  const { navigate, to, bg, back } = useNavigation()
-  useEffect(() => {
-    console.log(`mount ${label}`)
-    return () => {
-      console.log(`dismount ${label}`)
-    }
-  }, [label])
+  const { navigate, to, bg, back, get } = useNavigation()
+  const [test, setTest] = useState('')
   const next = useMemo(
     () => ({
       route: (() => {
@@ -50,19 +44,67 @@ export function Template(props: {
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigate(next.route, {
-            background: next.background,
-          })
+          const { route, background } = next
+          const payload = {
+            lastLabel: label,
+            rand: Math.random(),
+            test: () => console.log(`test func${label}`),
+          }
+          navigate(route, { background, payload })
         }}
       >
         <Text style={styles.text}>{label}</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          navigate(back)
+          navigate(back, {
+            background: (() => {
+              const bgs = [bg.black, bg.blue, bg.cyan]
+              const i = Math.floor(Math.random() * 100) % 3
+              return bgs[i]
+            })(),
+          })
         }}
       >
         <Text style={styles.text}>back</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          setTest('ready')
+        }}
+      >
+        <Text style={styles.text}>
+          {test || 'test dismounting view state'}
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload()
+          console.log(payload)
+          payload?.test()
+        }}
+      >
+        <Text style={styles.text}>log payload</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload(1)
+          console.log(payload)
+          payload?.test()
+        }}
+      >
+        <Text style={styles.text}>log previous payload</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload(2)
+          console.log(payload)
+          payload?.test()
+        }}
+      >
+        <Text style={styles.text}>
+          log previous previous payload
+        </Text>
       </Pressable>
     </View>
   )

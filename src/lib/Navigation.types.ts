@@ -1,7 +1,7 @@
-import type {
-  ImageSourcePropType,
-  ImageBackgroundProps,
-  ViewStyle,
+import {
+  type ImageSourcePropType,
+  type ImageBackgroundProps,
+  type ViewStyle,
 } from 'react-native'
 import { backToken } from './Navigation.back.token'
 
@@ -41,4 +41,9 @@ export type NavigationContextType<
   bg: Record<B, B>
   back: typeof backToken
   peek: () => NavigationState
+  get: {
+    payload: <T extends Record<string, any>>(
+      n?: number,
+    ) => T | null
+  }
 }

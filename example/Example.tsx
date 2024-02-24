@@ -3,17 +3,16 @@ import {
   navigationRoutes,
   navigationBackgrounds,
 } from './Navigation'
-// import SuperCat from './supercat.jpg'
+// import DefaultBackgroundImage from './assets/DefaultBackgroundImage.jpg'
 
 export function Example() {
-  console.log('render Example')
   return (
     <NavigationController
       initialRoute="/Home"
       backgroundColor="cyan"
       routes={navigationRoutes}
       backgrounds={navigationBackgrounds}
-      // backgroundImage={SuperCat}
+      // backgroundImage={DefaultBackgroundImage}
     />
   )
 }
