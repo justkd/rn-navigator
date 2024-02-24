@@ -15,10 +15,10 @@ export const useNavigationContext = <R, B>(
   backgrounds?: B,
 ) => {
   const navigate = useCallback(
-    (
+    <T extends Record<string, any>>(
       to: keyof R,
       opts?: {
-        payload?: Record<string, any>
+        payload?: T
         background?: string
       },
     ) => {

@@ -1,19 +1,30 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useMemo, useState } from 'react'
-import { useNavigation } from '../Navigation'
+import {
+  type NavigationRouteKey,
+  useNavigation,
+} from '../Navigation'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'cyan',
+    backgroundColor: 'black',
   },
   text: {
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
   },
 })
+
+type PayloadType = {
+  route: NavigationRouteKey
+  label: string
+  rand: number
+  getTestString: () => string
+}
 
 export function Template(props: {
   label: string
@@ -46,11 +57,12 @@ export function Template(props: {
         onPress={() => {
           const { route, background } = next
           const payload = {
-            lastLabel: label,
+            route,
+            label,
             rand: Math.random(),
-            test: () => console.log(`test func${label}`),
+            getTestString: () => `test func : ${route} ${label}`,
           }
-          navigate(route, { background, payload })
+          navigate<PayloadType>(route, { background, payload })
         }}
       >
         <Text style={styles.text}>{label}</Text>
@@ -79,9 +91,14 @@ export function Template(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          const payload = get.payload()
-          console.log(payload)
-          payload?.test()
+          try {
+            // This is not guarded.
+            type ExpectedPayloadType = PayloadType
+            const payload = get.payload<ExpectedPayloadType>()
+            console.log(payload, payload?.getTestString())
+          } catch (e) {
+            console.log(e)
+          }
         }}
       >
         <Text style={styles.text}>log payload</Text>
@@ -89,8 +106,7 @@ export function Template(props: {
       <Pressable
         onPress={() => {
           const payload = get.payload(1)
-          console.log(payload)
-          payload?.test()
+          console.log(payload, payload?.getTestString())
         }}
       >
         <Text style={styles.text}>log previous payload</Text>
@@ -98,8 +114,7 @@ export function Template(props: {
       <Pressable
         onPress={() => {
           const payload = get.payload(2)
-          console.log(payload)
-          payload?.test()
+          console.log(payload, payload?.getTestString())
         }}
       >
         <Text style={styles.text}>

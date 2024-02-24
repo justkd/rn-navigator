@@ -36,6 +36,7 @@
     "eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "eslint/lines-between-class-members": "off",
-    "eslint/operator-linebreak": "off"
+    "eslint/operator-linebreak": "off",
+    "eslint/object-curly-newline": "off"
   }
 }

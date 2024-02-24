@@ -9,7 +9,7 @@ export function Example() {
   return (
     <NavigationController
       initialRoute="/Home"
-      backgroundColor="cyan"
+      backgroundColor="black"
       routes={navigationRoutes}
       backgrounds={navigationBackgrounds}
       // backgroundImage={DefaultBackgroundImage}

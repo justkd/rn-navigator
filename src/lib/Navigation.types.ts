@@ -30,10 +30,10 @@ export type NavigationContextType<
   R extends string | number | symbol,
   B extends string | number | symbol,
 > = {
-  navigate: (
+  navigate: <T extends Record<string, any>>(
     to: R,
     opts?: {
-      payload?: Record<string, any>
+      payload?: T
       background?: string
     },
   ) => void
