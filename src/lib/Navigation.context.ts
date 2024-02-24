@@ -1,22 +1,22 @@
 import { useCallback, useMemo, type Dispatch } from 'react'
 import {
   type NavigationState,
-  type NavigationEvent,
+  type DispatchAction,
 } from './Navigation.types'
 import { backToken } from './Navigation.tokens'
 
-export const useNavigationContext = <R, B>(
+export const useNavigationContext = <
+  RouteGeneric,
+  BackgroundGeneric,
+>(
   state: NavigationState,
-  dispatch: Dispatch<{
-    type: string
-    event?: string | NavigationEvent | undefined
-  }>,
-  routes: R,
-  backgrounds?: B,
+  dispatch: Dispatch<DispatchAction>,
+  routes: RouteGeneric,
+  backgrounds?: BackgroundGeneric,
 ) => {
   const navigate = useCallback(
     <T extends Record<string, any>>(
-      to: keyof R,
+      to: keyof RouteGeneric,
       opts?: {
         payload?: T
         background?: string
@@ -34,13 +34,17 @@ export const useNavigationContext = <R, B>(
     [dispatch],
   )
 
-  const to: Record<keyof R, keyof R> = useMemo(() => {
-    const keys = Object.keys(routes as any)
-    const entries = keys.map((k) => [k, k])
-    return Object.fromEntries(entries)
-  }, [routes])
+  const to: Record<keyof RouteGeneric, keyof RouteGeneric> =
+    useMemo(() => {
+      const keys = Object.keys(routes as any)
+      const entries = keys.map((k) => [k, k])
+      return Object.fromEntries(entries)
+    }, [routes])
 
-  const bg: Record<keyof B, keyof B> = useMemo(() => {
+  const bg: Record<
+    keyof BackgroundGeneric,
+    keyof BackgroundGeneric
+  > = useMemo(() => {
     const keys = Object.keys(backgrounds as any)
     const entries = keys.map((k) => [k, k])
     return Object.fromEntries(entries)

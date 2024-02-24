@@ -1,9 +1,30 @@
 import {
+  type Animated,
   type ViewStyle,
   type ImageSourcePropType,
   type ImageBackgroundProps,
 } from 'react-native'
-import { backToken } from './Navigation.back.token'
+import { backToken, navDirTokens } from './Navigation.tokens'
+
+export type GetTypedRouteKeys<T> = Omit<T, typeof backToken>
+
+export type NavigationAnimation = Animated.CompositeAnimation
+
+export type NavigationAnimationFunction =
+  () => Animated.CompositeAnimation
+
+/**
+ * All animation types must be accounted for when adding
+ * a new animation style (eg. `translateLTR`).
+ */
+export type NavigationAnimations = {
+  in: NavigationAnimation
+  out: NavigationAnimation
+  error: NavigationAnimationFunction
+  backOut: NavigationAnimation
+  backIn: NavigationAnimationFunction
+  reset: (cb?: () => void) => void
+}
 
 /**
  * Describe a background view for a
@@ -17,6 +38,11 @@ export type NavigationBackground = {
   }
 }
 
+export type DispatchAction = {
+  type: string
+  event?: string | NavigationEvent
+}
+
 export type NavigationEvent = {
   to: string
   payload?: Record<string, any>
@@ -26,6 +52,10 @@ export type NavigationEvent = {
 export type NavigationState = {
   queue: NavigationEvent[]
   history: NavigationEvent[]
+  isNavigating:
+    | null
+    | typeof navDirTokens.fwd
+    | typeof navDirTokens.back
   background?: string
 }
 

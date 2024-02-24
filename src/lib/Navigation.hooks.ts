@@ -1,33 +1,23 @@
-import {
-  useEffect,
-  type Dispatch,
-  type MutableRefObject,
-} from 'react'
-import { Animated } from 'react-native'
+import { useEffect, type Dispatch } from 'react'
 import {
   type NavigationState,
-  type NavigationEvent,
+  type DispatchAction,
+  type NavigationAnimations,
 } from './Navigation.types'
 import { backToken } from './Navigation.tokens'
 
+type LocallyDependentProps = {
+  topLevelController: boolean
+}
+
 export const useNavigationHooks = (
   state: NavigationState,
-  dispatch: Dispatch<{
-    type: string
-    event?: string | NavigationEvent | undefined
-  }>,
-  animations: {
-    in: Animated.CompositeAnimation
-    out: Animated.CompositeAnimation
-    error: Animated.CompositeAnimation
-    backIn: () => Animated.CompositeAnimation
-    backOut: Animated.CompositeAnimation
-    reset: (cb?: (() => void) | undefined) => void
-  },
+  dispatch: Dispatch<DispatchAction>,
   initialRoute: string,
-  animT: MutableRefObject<Animated.Value>,
-  animO: MutableRefObject<Animated.Value>,
+  animations: NavigationAnimations,
+  props: LocallyDependentProps,
 ) => {
+  /* =^..^=  ✿  =^..^=  */
   useEffect(() => {
     // init NavigationController
     if (state.queue.length) return
@@ -36,15 +26,19 @@ export const useNavigationHooks = (
       event: initialRoute,
     })
   }, [initialRoute, state, dispatch])
-
+  /* =^..^=  ✿  =^..^=  */
   useEffect(() => {
+    // begin nav transition if there is a queue
     if (!(state.queue.length > 1)) return
-    // animate back nav event
+    // check for back nav event
     if (state.queue[1].to === backToken) {
+      // error anim when no history
       if (!state.history.length) {
-        animations.error.start()
+        animations.error().start()
+        dispatch({ type: 'go_back' })
         return
       }
+      // animate back nav event
       animations.backOut.start(() => {
         animations.reset(() => {
           dispatch({ type: 'go_back' })
@@ -57,22 +51,38 @@ export const useNavigationHooks = (
     animations.out.start(() => {
       animations.reset(() => {
         dispatch({ type: 'go_forward' })
-        animations.in.start()
+        animations.in.start(() => {
+          dispatch({ type: 'end_navigation' })
+        })
       })
     })
   }, [state, animations, dispatch])
-
+  /* =^..^=  ✿  =^..^=  */
+  useEffect(
+    // on dismount NavigationController
+    () => () => {
+      if (!props.topLevelController) return
+      const msg =
+        'Your broke it.' +
+        ' A top level navigation controller was dismounted.' +
+        ' It should not dismount.'
+      console.log(msg)
+    },
+    [props.topLevelController],
+  )
+  /* =^..^=  ✿  =^..^=  */
   useEffect(() => {
-    // mount NavigationController
+    // on mount NavigationController
     animations.in.start()
-    const anims = [animT.current, animO.current]
     return () => {
-      anims.forEach((anim) => {
-        anim.stopAnimation(() => {
-          anim.removeAllListeners()
-        })
-      })
+      if (!props.topLevelController) return
+      const msg =
+        'Your broke it.' +
+        ' A top level navigation controller was dismounted.' +
+        ' It should not dismount.'
+      console.log(msg)
     }
     /* eslint-disable-next-line */
   }, [])
+  /* =^..^=  ✿  =^..^=  */
 }

@@ -1,100 +1,97 @@
 import { useMemo, type MutableRefObject } from 'react'
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing, EasingFunction } from 'react-native'
+import { type NavigationAnimations } from './Navigation.types'
 
 export const navAnimBaseDur = 420
+
 export const useNavigationAnimations = (
   animTranslate: MutableRefObject<Animated.Value>,
   animOpacity: MutableRefObject<Animated.Value>,
 ) => {
-  const translateLTR = useMemo(
+  const animate = (to: number, easing: EasingFunction) => ({
+    toValue: to,
+    duration: navAnimBaseDur,
+    easing,
+    useNativeDriver: true,
+  })
+  const translateLTR: NavigationAnimations = useMemo(
     () => ({
+      /* =^..^=  ✿  =^..^=  */
       backIn: () => {
         animTranslate.current.setValue(2)
         return Animated.parallel([
-          Animated.timing(animTranslate.current, {
-            toValue: 1,
-            duration: navAnimBaseDur,
-            easing: Easing.in(Easing.exp),
-            useNativeDriver: true,
-          }),
-          Animated.timing(animOpacity.current, {
-            toValue: 1,
-            duration: navAnimBaseDur,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
+          Animated.timing(
+            animTranslate.current,
+            animate(1, Easing.in(Easing.exp)),
+          ),
+          Animated.timing(
+            animOpacity.current,
+            animate(1, Easing.inOut(Easing.ease)),
+          ),
         ])
       },
-      /* ***************** */
-      /* ***************** */
+      /* =^..^=  ✿  =^..^=  */
       backOut: Animated.parallel([
-        Animated.timing(animTranslate.current, {
-          toValue: -1,
-          duration: navAnimBaseDur,
-          easing: Easing.in(Easing.exp),
-          useNativeDriver: true,
-        }),
-        Animated.timing(animOpacity.current, {
-          toValue: 0,
-          duration: navAnimBaseDur,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
+        Animated.timing(
+          animTranslate.current,
+          animate(-1, Easing.in(Easing.exp)),
+        ),
+        Animated.timing(
+          animOpacity.current,
+          animate(0, Easing.inOut(Easing.ease)),
+        ),
       ]),
-      /* ***************** */
-      /* ***************** */
+      /* =^..^=  ✿  =^..^=  */
       in: Animated.parallel([
-        Animated.timing(animTranslate.current, {
-          toValue: 1,
-          duration: navAnimBaseDur,
-          easing: Easing.in(Easing.exp),
-          useNativeDriver: true,
-        }),
-        Animated.timing(animOpacity.current, {
-          toValue: 1,
-          duration: navAnimBaseDur,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
+        Animated.timing(
+          animTranslate.current,
+          animate(1, Easing.in(Easing.exp)),
+        ),
+        Animated.timing(
+          animOpacity.current,
+          animate(1, Easing.inOut(Easing.ease)),
+        ),
       ]),
-      /* ***************** */
-      /* ***************** */
+      /* =^..^=  ✿  =^..^=  */
       out: Animated.parallel([
-        Animated.timing(animTranslate.current, {
-          toValue: 2,
-          duration: navAnimBaseDur,
-          easing: Easing.in(Easing.exp),
-          useNativeDriver: true,
-        }),
-        Animated.timing(animOpacity.current, {
-          toValue: 0,
-          duration: navAnimBaseDur,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
+        Animated.timing(
+          animTranslate.current,
+          animate(2, Easing.in(Easing.exp)),
+        ),
+        Animated.timing(
+          animOpacity.current,
+          animate(0, Easing.inOut(Easing.ease)),
+        ),
       ]),
-      error: Animated.sequence([
-        Animated.timing(animTranslate.current, {
-          toValue: 1.1,
-          duration: navAnimBaseDur / 10,
-          easing: Easing.bounce,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animTranslate.current, {
-          toValue: 0.9,
-          duration: navAnimBaseDur / 10,
-          easing: Easing.bounce,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animTranslate.current, {
-          toValue: 1,
-          duration: navAnimBaseDur / 10,
-          easing: Easing.bounce,
-          useNativeDriver: true,
-        }),
-      ]),
-      /* ***************** */
-      /* ***************** */
+      /* =^..^=  ✿  =^..^=  */
+      error: () => {
+        const stage = (to: number) =>
+          Animated.timing(animTranslate.current, {
+            toValue: to,
+            duration: navAnimBaseDur / 10,
+            easing: Easing.bounce,
+            useNativeDriver: true,
+          })
+        animTranslate.current.setValue(1)
+        const base = 1
+        const delta = (n: number) => n * (base + 0.04)
+        const lerp = (n: number) =>
+          n + 1 < 0
+            ? base - Math.log10(Math.abs(n - 1))
+            : base + Math.log10(n + 1)
+        return Animated.sequence([
+          stage(lerp(delta(0.05))),
+          stage(lerp(delta(-0.05))),
+          stage(lerp(delta(0.025))),
+          stage(lerp(delta(-0.025))),
+          stage(lerp(delta(0.0125))),
+          stage(lerp(delta(-0.0125))),
+          stage(lerp(delta(0.001))),
+          stage(lerp(delta(-0.001))),
+          stage(base),
+        ])
+      },
+      /* =^..^=  ✿  =^..^=  */
       reset: (cb?: () => void) => {
         animTranslate.current.stopAnimation(() => {
           animTranslate.current.removeAllListeners()
@@ -106,8 +103,7 @@ export const useNavigationAnimations = (
           })
         })
       },
-      /* ***************** */
-      /* ***************** */
+      /* =^..^=  ✿  =^..^=  */
     }),
     [animOpacity, animTranslate],
   )

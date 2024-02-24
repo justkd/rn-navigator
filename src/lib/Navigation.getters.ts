@@ -1,7 +1,5 @@
 import { backToken } from './Navigation.tokens'
 
-export type GetTypedRouteKeys<T> = Omit<T, typeof backToken>
-
 export const getTypedRoutes = <T extends Record<any, any>>(
   routes: T,
 ) => {

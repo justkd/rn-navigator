@@ -1,22 +1,23 @@
+import { backToken, navDirTokens } from './Navigation.tokens'
 import {
   type NavigationState,
   type NavigationEvent,
+  type DispatchAction,
 } from './Navigation.types'
 
 export function navigationReducer(
   state: NavigationState,
-  action: {
-    type: string
-    event?: string | NavigationEvent
-  },
+  action: DispatchAction,
 ) {
   switch (action.type) {
+    /* =^..^=  ✿  =^..^=  */
     case 'init': {
       return {
         ...state,
         queue: [{ to: action.event as string }],
       }
     }
+    /* =^..^=  ✿  =^..^=  */
     case 'navigate': {
       const event =
         action?.event && typeof action?.event !== 'string'
@@ -29,11 +30,22 @@ export function navigationReducer(
       return event
         ? {
             ...state,
+            isNavigating:
+              event.to === backToken
+                ? navDirTokens.back
+                : navDirTokens.fwd,
             background,
             queue: [...state.queue, event],
           }
         : state
     }
+    case 'end_navigation': {
+      return {
+        ...state,
+        isNavigating: null,
+      }
+    }
+    /* =^..^=  ✿  =^..^=  */
     case 'go_back': {
       if (!state.history.length) {
         const queue = [...state.queue]
@@ -52,8 +64,10 @@ export function navigationReducer(
         ...state,
         queue,
         history,
+        isNavigating: navDirTokens.back,
       }
     }
+    /* =^..^=  ✿  =^..^=  */
     case 'go_forward': {
       const queue = [...state.queue]
       const event = [queue.shift()] as NavigationEvent[]
@@ -66,8 +80,10 @@ export function navigationReducer(
         history,
       }
     }
+    /* =^..^=  ✿  =^..^=  */
     default: {
       throw Error(`Unknown action: ${action.type}`)
     }
+    /* =^..^=  ✿  =^..^=  */
   }
 }
