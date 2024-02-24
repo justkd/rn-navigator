@@ -4,7 +4,7 @@ import {
   type DispatchAction,
   type NavigationAnimations,
 } from './Navigation.types'
-import { backToken } from './Navigation.tokens'
+import { backToken, navDirTokens } from './Navigation.tokens'
 
 type LocallyDependentProps = {
   topLevelController: boolean
@@ -35,14 +35,16 @@ export const useNavigationHooks = (
       // error anim when no history
       if (!state.history.length) {
         animations.error().start()
-        dispatch({ type: 'go_back' })
+        dispatch({ type: 'go_back_in_history' })
         return
       }
       // animate back nav event
       animations.backOut.start(() => {
         animations.reset(() => {
-          dispatch({ type: 'go_back' })
-          animations.backIn().start()
+          dispatch({ type: 'go_back_in_history' })
+          animations.backIn().start(() => {
+            dispatch({ type: 'end_navigation' })
+          })
         })
       })
       return
@@ -50,7 +52,7 @@ export const useNavigationHooks = (
     // animate forward nav event
     animations.out.start(() => {
       animations.reset(() => {
-        dispatch({ type: 'go_forward' })
+        dispatch({ type: 'go_forward_in_history' })
         animations.in.start(() => {
           dispatch({ type: 'end_navigation' })
         })

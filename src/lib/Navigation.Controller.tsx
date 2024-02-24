@@ -18,7 +18,7 @@ import { useNavigationAnimations } from './Navigation.animations'
 import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
 import { navigationReducer } from './Navigation.reducer'
-import { backToken } from './Navigation.tokens'
+import { backToken, navDirTokens } from './Navigation.tokens'
 import { NavigationErrorView } from './Navigation.ErrorView'
 import type { NavigationContextType } from './Navigation.types'
 
@@ -111,6 +111,7 @@ export function getNavigationController<
       /* =^..^=  ✿  =^..^=  */
       return (
         <NavigationContext.Provider value={ctx}>
+          {/* Base background. */}
           <ImageBackground
             style={[
               backgroundImageStyle,
@@ -119,19 +120,20 @@ export function getNavigationController<
             resizeMode="cover"
             source={backgroundImage ?? {}}
           />
+          {/* Hides any background images if a back nav event 
+          is launched without any history to go back to. */}
           <View
             pointerEvents="none"
             style={[
               backgroundImageStyle,
               {
-                opacity:
-                  state.isNavigating === 'back' &&
-                  !state.history.length
-                    ? 1
-                    : 0,
+                opacity: Number(
+                  state.isNavigating !== navDirTokens.error,
+                ),
               },
             ]}
           >
+            {/* Pre-render background images and hide ones that aren't needed. */}
             {Object.entries(backgrounds || {}).map(
               ([k, v]: any) => {
                 const { color, image } = v
@@ -156,6 +158,7 @@ export function getNavigationController<
               },
             )}
           </View>
+          {/* Nav animation container. */}
           <Animated.View
             style={{
               height: '100%',

@@ -56,6 +56,7 @@ export type NavigationState = {
     | null
     | typeof navDirTokens.fwd
     | typeof navDirTokens.back
+    | typeof navDirTokens.error
   background?: string
 }
 

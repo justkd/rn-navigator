@@ -27,18 +27,23 @@ export function navigationReducer(
         typeof action.event !== 'string'
           ? action.event?.background
           : undefined
+      const whichBackType = state.history.length
+        ? navDirTokens.back
+        : navDirTokens.error
+      const isNavigating =
+        event?.to === backToken
+          ? whichBackType
+          : navDirTokens.fwd
       return event
         ? {
             ...state,
-            isNavigating:
-              event.to === backToken
-                ? navDirTokens.back
-                : navDirTokens.fwd,
             background,
+            isNavigating,
             queue: [...state.queue, event],
           }
         : state
     }
+    /* =^..^=  ✿  =^..^=  */
     case 'end_navigation': {
       return {
         ...state,
@@ -46,7 +51,7 @@ export function navigationReducer(
       }
     }
     /* =^..^=  ✿  =^..^=  */
-    case 'go_back': {
+    case 'go_back_in_history': {
       if (!state.history.length) {
         const queue = [...state.queue]
         queue.pop()
@@ -64,11 +69,10 @@ export function navigationReducer(
         ...state,
         queue,
         history,
-        isNavigating: navDirTokens.back,
       }
     }
     /* =^..^=  ✿  =^..^=  */
-    case 'go_forward': {
+    case 'go_forward_in_history': {
       const queue = [...state.queue]
       const event = [queue.shift()] as NavigationEvent[]
       const history = event.length
