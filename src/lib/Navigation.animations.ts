@@ -73,6 +73,26 @@ export const useNavigationAnimations = (
           useNativeDriver: true,
         }),
       ]),
+      error: Animated.sequence([
+        Animated.timing(animTranslate.current, {
+          toValue: 1.1,
+          duration: navAnimBaseDur / 10,
+          easing: Easing.bounce,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animTranslate.current, {
+          toValue: 0.9,
+          duration: navAnimBaseDur / 10,
+          easing: Easing.bounce,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animTranslate.current, {
+          toValue: 1,
+          duration: navAnimBaseDur / 10,
+          easing: Easing.bounce,
+          useNativeDriver: true,
+        }),
+      ]),
       /* ***************** */
       /* ***************** */
       reset: (cb?: () => void) => {

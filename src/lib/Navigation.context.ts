@@ -3,7 +3,7 @@ import {
   type NavigationState,
   type NavigationEvent,
 } from './Navigation.types'
-import { backToken } from './Navigation.back.token'
+import { backToken } from './Navigation.tokens'
 
 export const useNavigationContext = <R, B>(
   state: NavigationState,

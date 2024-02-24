@@ -71,8 +71,9 @@ export function Template(props: {
         onPress={() => {
           navigate(back, {
             background: (() => {
-              const bgs = [bg.black, bg.blue, bg.cyan]
-              const i = Math.floor(Math.random() * 100) % 3
+              const bgs = Object.keys(bg)
+              const i =
+                Math.floor(Math.random() * 100) % bgs.length
               return bgs[i]
             })(),
           })

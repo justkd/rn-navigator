@@ -1,4 +1,4 @@
-import { backToken } from './Navigation.back.token'
+import { backToken } from './Navigation.tokens'
 
 export type GetTypedRouteKeys<T> = Omit<T, typeof backToken>
 

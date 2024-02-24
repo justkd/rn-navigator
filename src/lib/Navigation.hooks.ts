@@ -8,7 +8,7 @@ import {
   type NavigationState,
   type NavigationEvent,
 } from './Navigation.types'
-import { backToken } from './Navigation.back.token'
+import { backToken } from './Navigation.tokens'
 
 export const useNavigationHooks = (
   state: NavigationState,
@@ -19,6 +19,7 @@ export const useNavigationHooks = (
   animations: {
     in: Animated.CompositeAnimation
     out: Animated.CompositeAnimation
+    error: Animated.CompositeAnimation
     backIn: () => Animated.CompositeAnimation
     backOut: Animated.CompositeAnimation
     reset: (cb?: (() => void) | undefined) => void
@@ -40,6 +41,10 @@ export const useNavigationHooks = (
     if (!(state.queue.length > 1)) return
     // animate back nav event
     if (state.queue[1].to === backToken) {
+      if (!state.history.length) {
+        animations.error.start()
+        return
+      }
       animations.backOut.start(() => {
         animations.reset(() => {
           dispatch({ type: 'go_back' })

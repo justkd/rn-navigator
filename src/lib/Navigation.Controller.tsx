@@ -16,7 +16,7 @@ import {
 import { useNavigationAnimations } from './Navigation.animations'
 import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
-import { backToken } from './Navigation.back.token'
+import { backToken } from './Navigation.tokens'
 import { navigationReducer } from './Navigation.reducer'
 import { NavigationErrorView } from './Navigation.ErrorView'
 import type { NavigationContextType } from './Navigation.types'
@@ -100,7 +100,7 @@ export function getNavigationController<R, B>() {
             ([k, v]: any) => {
               const { color, image } = v
               const { style, resizeMode, source } = image || {}
-              /* eslint-disable-next-line  */
+              /* eslint-disable-next-line */
               const { opacity, ...style$ } = style || {}
               return (
                 <ImageBackground
