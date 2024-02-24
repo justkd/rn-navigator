@@ -11,8 +11,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 30,
-    paddingVertical: '10%',
+    fontSize: 20,
   },
 })
 
@@ -41,7 +40,6 @@ export function Template(props: {
     }),
     [to, bg, index],
   )
-  // ADD PAYLOAD STUFF - RETRIEVE IN PAYLOAD WITH USENAVIGATION
   return (
     <View style={styles.container}>
       <Pressable
@@ -72,17 +70,18 @@ export function Template(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          setTest('tested')
+          setTest('ready')
         }}
       >
         <Text style={styles.text}>
-          {test || 'test dismount state'}
+          {test || 'test dismounting view state'}
         </Text>
       </Pressable>
       <Pressable
         onPress={() => {
           const payload = get.payload()
           console.log(payload)
+          payload?.test()
         }}
       >
         <Text style={styles.text}>log payload</Text>
@@ -91,9 +90,21 @@ export function Template(props: {
         onPress={() => {
           const payload = get.payload(1)
           console.log(payload)
+          payload?.test()
         }}
       >
         <Text style={styles.text}>log previous payload</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload(2)
+          console.log(payload)
+          payload?.test()
+        }}
+      >
+        <Text style={styles.text}>
+          log previous previous payload
+        </Text>
       </Pressable>
     </View>
   )

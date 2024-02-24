@@ -22,7 +22,7 @@ const backgrounds = {
   blue: { color: 'blue' },
   cyan: { color: 'cyan' },
 }
-
+/* ******************** */
 export const {
   navigationBackgrounds,
   navigationBackgroundKeys,

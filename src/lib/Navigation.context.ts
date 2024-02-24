@@ -57,11 +57,13 @@ export const useNavigationContext = <R, B>(
 
   const payload = useCallback(
     <T>(n?: number) => {
-      const $payload = state.history.reverse()[n ?? 0]
+      const $payload = !n
+        ? state.queue[0]
+        : [...state.history].reverse()[n - 1]
       const load = $payload?.payload || null
       return load ? (load as T) : null
     },
-    [state.history],
+    [state.history, state.queue],
   )
 
   const ctx = useMemo(

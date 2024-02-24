@@ -42,6 +42,8 @@ export type NavigationContextType<
   back: typeof backToken
   peek: () => NavigationState
   get: {
-    payload: <T>(n?: number) => T | null
+    payload: <T extends Record<string, any>>(
+      n?: number,
+    ) => T | null
   }
 }
