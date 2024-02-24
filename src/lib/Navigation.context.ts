@@ -9,7 +9,7 @@ export const useNavigationContext = <R, B>(
   state: NavigationState,
   dispatch: Dispatch<{
     type: string
-    payload?: string | NavigationEvent | undefined
+    event?: string | NavigationEvent | undefined
   }>,
   routes: R,
   backgrounds?: B,
@@ -24,7 +24,7 @@ export const useNavigationContext = <R, B>(
     ) => {
       dispatch({
         type: 'navigate',
-        payload: {
+        event: {
           to: to as string,
           payload: opts?.payload,
           background: opts?.background,

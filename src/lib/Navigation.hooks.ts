@@ -14,7 +14,7 @@ export const useNavigationHooks = (
   state: NavigationState,
   dispatch: Dispatch<{
     type: string
-    payload?: string | NavigationEvent | undefined
+    event?: string | NavigationEvent | undefined
   }>,
   animations: {
     in: Animated.CompositeAnimation
@@ -32,7 +32,7 @@ export const useNavigationHooks = (
     if (state.queue.length) return
     dispatch({
       type: 'init',
-      payload: initialRoute,
+      event: initialRoute,
     })
   }, [initialRoute, state, dispatch])
 

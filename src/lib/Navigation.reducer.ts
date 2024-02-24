@@ -7,24 +7,24 @@ export function navigationReducer(
   state: NavigationState,
   action: {
     type: string
-    payload?: string | NavigationEvent
+    event?: string | NavigationEvent
   },
 ) {
   switch (action.type) {
     case 'init': {
       return {
         ...state,
-        queue: [{ to: action.payload as string }],
+        queue: [{ to: action.event as string }],
       }
     }
     case 'navigate': {
       const event =
-        action?.payload && typeof action?.payload !== 'string'
-          ? action?.payload
+        action?.event && typeof action?.event !== 'string'
+          ? action?.event
           : null
       const background =
-        typeof action.payload !== 'string'
-          ? action.payload?.background
+        typeof action.event !== 'string'
+          ? action.event?.background
           : undefined
       return event
         ? {
