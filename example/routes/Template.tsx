@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigation } from '../Navigation'
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ export function Template(props: {
 }) {
   const numExtraRoutes = 1
   const { label, index } = props
-  const { navigate, to, bg, back } = useNavigation()
+  const { navigate, to, bg, back, get } = useNavigation()
   const [test, setTest] = useState('')
   const next = useMemo(
     () => ({
@@ -46,14 +46,13 @@ export function Template(props: {
     <View style={styles.container}>
       <Pressable
         onPress={() => {
-          navigate(next.route, {
-            background: next.background,
-            payload: {
-              lastLabel: label,
-              rand: Math.random(),
-              test: () => console.log('test func'),
-            },
-          })
+          const { route, background } = next
+          const payload = {
+            lastLabel: label,
+            rand: Math.random(),
+            test: () => console.log(`test func${label}`),
+          }
+          navigate(route, { background, payload })
         }}
       >
         <Text style={styles.text}>{label}</Text>
@@ -76,7 +75,25 @@ export function Template(props: {
           setTest('tested')
         }}
       >
-        <Text style={styles.text}>{test || 'test'}</Text>
+        <Text style={styles.text}>
+          {test || 'test dismount state'}
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload()
+          console.log(payload)
+        }}
+      >
+        <Text style={styles.text}>log payload</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          const payload = get.payload(1)
+          console.log(payload)
+        }}
+      >
+        <Text style={styles.text}>log previous payload</Text>
       </Pressable>
     </View>
   )

@@ -55,6 +55,15 @@ export const useNavigationContext = <R, B>(
 
   const back = useMemo(() => backToken, [])
 
+  const payload = useCallback(
+    <T>(n?: number) => {
+      const $payload = state.history.reverse()[n ?? 0]
+      const load = $payload?.payload || null
+      return load ? (load as T) : null
+    },
+    [state.history],
+  )
+
   const ctx = useMemo(
     () => ({
       navigate,
@@ -62,8 +71,11 @@ export const useNavigationContext = <R, B>(
       to,
       bg,
       back,
+      get: {
+        payload,
+      },
     }),
-    [navigate, peek, to, bg, back],
+    [navigate, peek, to, bg, back, payload],
   )
 
   return { ctx }

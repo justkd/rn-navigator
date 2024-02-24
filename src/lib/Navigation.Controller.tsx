@@ -13,13 +13,13 @@ import {
   type ImageSourcePropType,
   type ViewStyle,
 } from 'react-native'
-import { navigationReducer } from './Navigation.reducer'
 import { useNavigationAnimations } from './Navigation.animations'
 import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
+import { backToken } from './Navigation.back.token'
+import { navigationReducer } from './Navigation.reducer'
 import { NavigationErrorView } from './Navigation.ErrorView'
 import type { NavigationContextType } from './Navigation.types'
-import { backToken } from './Navigation.back.token'
 
 export function getNavigationController<R, B>() {
   type UserRouteKey = keyof Omit<R, typeof backToken>

@@ -1,4 +1,5 @@
-import { Template } from './Template'
+// Use require when you need to avoid import cycles.
+const { Template } = require('./Template')
 
 export const Templates = [
   'one',
