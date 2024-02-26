@@ -18,20 +18,38 @@ export function navigationReducer(
       }
     }
     /* =^..^=  ✿  =^..^=  */
+    case 'set': {
+      const next = action.event as Partial<NavigationState>
+      return {
+        ...state,
+        ...next,
+      }
+    }
+    /* =^..^=  ✿  =^..^=  */
+    case 'clear': {
+      return {
+        queue: [] as NavigationState['queue'],
+        history: [] as NavigationState['history'],
+        isNavigating: null,
+        background: undefined,
+      }
+    }
+    /* =^..^=  ✿  =^..^=  */
     case 'navigate': {
       const event =
         action?.event && typeof action?.event !== 'string'
-          ? action?.event
+          ? (action?.event as NavigationEvent)
           : null
       const background =
-        typeof action.event !== 'string'
+        typeof action.event !== 'string' &&
+        typeof action.event !== 'boolean'
           ? action.event?.background
           : undefined
       const whichBackType = state.history.length
         ? navDirTokens.back
         : navDirTokens.error
       const isNavigating =
-        event?.to === backToken
+        typeof event !== 'boolean' && event?.to === backToken
           ? whichBackType
           : navDirTokens.fwd
       return event

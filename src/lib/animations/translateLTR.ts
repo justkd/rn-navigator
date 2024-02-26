@@ -117,5 +117,5 @@ export const useTranslateLTR = (
     }),
     [animOpacity, animTranslate],
   )
-  return { anims: translateLTR }
+  return { anims: translateLTR, baseDur }
 }

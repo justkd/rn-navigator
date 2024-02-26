@@ -12,6 +12,8 @@ export const useNavigationContext = <
   state: NavigationState,
   dispatch: Dispatch<DispatchAction>,
   routes: RouteGeneric,
+  initialRoute: string,
+  baseDur: number,
   backgrounds?: BackgroundGeneric,
 ) => {
   /* =^..^=  ✿  =^..^=  */
@@ -70,20 +72,53 @@ export const useNavigationContext = <
     [state.history, state.queue],
   )
   /* =^..^=  ✿  =^..^=  */
+  const clear = useCallback(
+    (background?: string) => {
+      dispatch({
+        type: 'navigate',
+        event: {
+          to: initialRoute as string,
+          background,
+        },
+      })
+      setTimeout(() => {
+        dispatch({ type: 'clear' })
+      }, baseDur * 2)
+    },
+    [dispatch, initialRoute, baseDur],
+  )
+  /* =^..^=  ✿  =^..^=  */
+  const set = useCallback(
+    (next: Partial<NavigationState>) => {
+      dispatch({
+        type: 'set',
+        event: next,
+      })
+    },
+    [dispatch],
+  )
+  /* =^..^=  ✿  =^..^=  */
   const back = useMemo(() => backToken, [])
+  /* =^..^=  ✿  =^..^=  */
+  const navigator = useMemo(
+    () => ({
+      peek,
+      clear,
+      payload,
+      set,
+    }),
+    [payload, peek, clear, set],
+  )
   /* =^..^=  ✿  =^..^=  */
   const ctx = useMemo(
     () => ({
       navigate,
-      peek,
       to,
       bg,
       back,
-      get: {
-        payload,
-      },
+      navigator,
     }),
-    [navigate, peek, to, bg, back, payload],
+    [navigate, to, bg, back, navigator],
   )
   /* =^..^=  ✿  =^..^=  */
   return { ctx }

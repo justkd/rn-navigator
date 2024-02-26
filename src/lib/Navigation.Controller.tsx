@@ -14,6 +14,7 @@ import {
   type ImageSourcePropType,
   type ViewStyle,
 } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 import {
   NavigationAnimationTypes,
   useNavigationAnimations,
@@ -63,7 +64,7 @@ export function getNavigationController<
       /* =^..^=  ✿  =^..^=  */
       const animT = useRef(new Animated.Value(0))
       const animO = useRef(new Animated.Value(0))
-      const { anims } = useNavigationAnimations(
+      const { anims, baseDur } = useNavigationAnimations(
         animT,
         animO,
         NavigationAnimationTypes.translateLTR,
@@ -97,7 +98,14 @@ export function getNavigationController<
       const { ctx } = useNavigationContext<
         Record<keyof RouteGeneric, ComponentType>,
         BackgroundGeneric
-      >(state, dispatch, $routes, backgrounds)
+      >(
+        state,
+        dispatch,
+        $routes,
+        String(initialRoute),
+        baseDur,
+        backgrounds,
+      )
       /* =^..^=  ✿  =^..^=  */
       const CurrentView = useMemo(() => {
         const key = state.queue[0]?.to
@@ -115,6 +123,7 @@ export function getNavigationController<
       /* =^..^=  ✿  =^..^=  */
       return (
         <NavigationContext.Provider value={ctx}>
+          <StatusBar />
           {/* Base background. */}
           <ImageBackground
             style={[

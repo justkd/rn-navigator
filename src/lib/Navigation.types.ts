@@ -40,7 +40,11 @@ export type NavigationBackground = {
 
 export type DispatchAction = {
   type: string
-  event?: string | NavigationEvent
+  event?:
+    | string
+    | boolean
+    | NavigationEvent
+    | Partial<NavigationState>
 }
 
 export type NavigationEvent = {
@@ -49,22 +53,26 @@ export type NavigationEvent = {
   background?: string
 }
 
+type IsNavigating =
+  | null
+  | typeof navDirTokens.fwd
+  | typeof navDirTokens.back
+  | typeof navDirTokens.error
+
 export type NavigationState = {
   queue: NavigationEvent[]
   history: NavigationEvent[]
-  isNavigating:
-    | null
-    | typeof navDirTokens.fwd
-    | typeof navDirTokens.back
-    | typeof navDirTokens.error
+  isNavigating: IsNavigating
   background?: string
 }
+
+type GenericObj = Record<string, any>
 
 export type NavigationContextType<
   R extends string | number | symbol,
   B extends string | number | symbol,
 > = {
-  navigate: <T extends Record<string, any>>(
+  navigate: <T extends GenericObj>(
     to: R,
     opts?: {
       payload?: T
@@ -74,10 +82,10 @@ export type NavigationContextType<
   to: Record<R, R>
   bg: Record<B, B>
   back: typeof backToken
-  peek: () => NavigationState
-  get: {
-    payload: <T extends Record<string, any>>(
-      n?: number,
-    ) => T | null
+  navigator: {
+    peek: () => NavigationState
+    clear: (background?: string) => void
+    payload: <T extends GenericObj>(n?: number) => T | null
+    set: (next: Partial<NavigationState>) => void
   }
 }

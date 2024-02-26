@@ -1,8 +1,20 @@
 {
-  "name": "@justkd/testy-test",
+  "name": "@justkd/rn-navigator",
   "author": "Cadence Holmes, @justkd",
   "version": "0.1.0",
   "license": "MIT",
+  "description": "",
+  "keywords": [
+    "rn",
+    "react native",
+    "react-native",
+    "navigator",
+    "navigation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justkd/rn-navigator"
+  },
   "scripts": {
     "publish:private": "npm publish",
     "publish:public": "npm publish --access public"

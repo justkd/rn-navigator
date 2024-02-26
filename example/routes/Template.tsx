@@ -43,7 +43,7 @@ export function Template(props: {
 }) {
   const numExtraRoutes = 1
   const { label, index } = props
-  const { navigate, to, bg, back, get, peek } = useNavigation()
+  const { navigate, to, bg, back, navigator } = useNavigation()
   const [test, setTest] = useState('')
   const next = useMemo(
     () => ({
@@ -118,7 +118,8 @@ export function Template(props: {
             try {
               // This is not guarded.
               type ExpectedPayloadType = PayloadType
-              const payload = get.payload<ExpectedPayloadType>()
+              const payload =
+                navigator.payload<ExpectedPayloadType>()
               console.log(payload)
             } catch (e) {
               console.log(e)
@@ -131,7 +132,8 @@ export function Template(props: {
           onPress={() => {
             // This is not guarded.
             type ExpectedPayloadType = PayloadType
-            const payload = get.payload<ExpectedPayloadType>(1)
+            const payload =
+              navigator.payload<ExpectedPayloadType>(1)
             console.log(payload)
           }}
         >
@@ -141,7 +143,8 @@ export function Template(props: {
           onPress={() => {
             // This is not guarded.
             type ExpectedPayloadType = PayloadType
-            const payload = get.payload<ExpectedPayloadType>(2)
+            const payload =
+              navigator.payload<ExpectedPayloadType>(2)
             console.log(payload)
           }}
         >
@@ -154,7 +157,8 @@ export function Template(props: {
         onPress={() => {
           // This is not guarded.
           type ExpectedPayloadType = PayloadType
-          const payload = get.payload<ExpectedPayloadType>()
+          const payload =
+            navigator.payload<ExpectedPayloadType>()
           console.log('You pass a sign pointing behind you.')
           console.log(payload?.readSign())
         }}
@@ -163,10 +167,26 @@ export function Template(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          console.log(peek())
+          console.log(navigator.peek())
         }}
       >
         <Text style={styles.text}>journal</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigator.clear()
+        }}
+      >
+        <Text style={styles.text}>teleport</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigator.set({
+            history: [{ to: '/A' }],
+          })
+        }}
+      >
+        <Text style={styles.text}>teleport</Text>
       </Pressable>
     </View>
   )
