@@ -1,4 +1,4 @@
-# template-expo-ts-npm-publish
+# @justkd/rn-navigator
 
 The codesandbox tasks `runAtStart` for this
 isn't working for the `start` script. Just
