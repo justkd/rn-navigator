@@ -14,13 +14,16 @@ import {
   type ImageSourcePropType,
   type ViewStyle,
 } from 'react-native'
-import { useNavigationAnimations } from './Navigation.animations'
+import {
+  NavigationAnimationTypes,
+  useNavigationAnimations,
+} from './Navigation.animations'
 import { useNavigationHooks } from './Navigation.hooks'
 import { useNavigationContext } from './Navigation.context'
 import { navigationReducer } from './Navigation.reducer'
 import { backToken, navDirTokens } from './Navigation.tokens'
 import { NavigationErrorView } from './Navigation.ErrorView'
-import type { NavigationContextType } from './Navigation.types'
+import { type NavigationContextType } from './Navigation.types'
 
 export function getNavigationController<
   RouteGeneric,
@@ -60,7 +63,11 @@ export function getNavigationController<
       /* =^..^=  ✿  =^..^=  */
       const animT = useRef(new Animated.Value(0))
       const animO = useRef(new Animated.Value(0))
-      const anims = useNavigationAnimations(animT, animO)
+      const { anims } = useNavigationAnimations(
+        animT,
+        animO,
+        NavigationAnimationTypes.translateLTR,
+      )
       /* =^..^=  ✿  =^..^=  */
       const { width, height } = useWindowDimensions()
       const backgroundImageStyle: ViewStyle = useMemo(
@@ -94,19 +101,16 @@ export function getNavigationController<
       /* =^..^=  ✿  =^..^=  */
       const CurrentView = useMemo(() => {
         const key = state.queue[0]?.to
-        const Current =
-          (routes as any)[key] || NavigationErrorView
-        return Current ? <Current /> : null
+        const Current = (routes as any)[key]
+        return Current ? <Current /> : <NavigationErrorView />
       }, [routes, state])
       /* =^..^=  ✿  =^..^=  */
       useNavigationHooks(
         state,
         dispatch,
         String(initialRoute),
-        anims.translateLTR,
-        {
-          topLevelController,
-        },
+        anims,
+        { topLevelController },
       )
       /* =^..^=  ✿  =^..^=  */
       return (

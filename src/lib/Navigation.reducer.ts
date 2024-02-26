@@ -44,7 +44,7 @@ export function navigationReducer(
         : state
     }
     /* =^..^=  ✿  =^..^=  */
-    case 'end_navigation': {
+    case 'end_navigation_animation': {
       return {
         ...state,
         isNavigating: null,
@@ -86,7 +86,9 @@ export function navigationReducer(
     }
     /* =^..^=  ✿  =^..^=  */
     default: {
-      throw Error(`Unknown action: ${action.type}`)
+      throw Error(
+        `rn-navigator : unknown navigation action : ${action.type}`,
+      )
     }
     /* =^..^=  ✿  =^..^=  */
   }

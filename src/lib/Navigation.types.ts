@@ -14,8 +14,8 @@ export type NavigationAnimationFunction =
   () => Animated.CompositeAnimation
 
 /**
- * All animation types must be accounted for when adding
- * a new animation style (eg. `translateLTR`).
+ * All animation keys must be accounted for when adding
+ * a new animation type (eg. `translateLTR`).
  */
 export type NavigationAnimations = {
   in: NavigationAnimation

@@ -43,7 +43,7 @@ export const useNavigationHooks = (
         animations.reset(() => {
           dispatch({ type: 'go_back_in_history' })
           animations.backIn().start(() => {
-            dispatch({ type: 'end_navigation' })
+            dispatch({ type: 'end_navigation_animation' })
           })
         })
       })
@@ -54,7 +54,7 @@ export const useNavigationHooks = (
       animations.reset(() => {
         dispatch({ type: 'go_forward_in_history' })
         animations.in.start(() => {
-          dispatch({ type: 'end_navigation' })
+          dispatch({ type: 'end_navigation_animation' })
         })
       })
     })
@@ -68,6 +68,7 @@ export const useNavigationHooks = (
         'Your broke it.' +
         ' A top level navigation controller was dismounted.' +
         ' It should not dismount.'
+      /* eslint-disable-next-line */
       console.log(msg)
     },
     [props.topLevelController],
@@ -82,6 +83,7 @@ export const useNavigationHooks = (
         'Your broke it.' +
         ' A top level navigation controller was dismounted.' +
         ' It should not dismount.'
+      /* eslint-disable-next-line */
       console.log(msg)
     }
     /* eslint-disable-next-line */

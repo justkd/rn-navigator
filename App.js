@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, SafeAreaView } from 'react-native'
-import { Example } from './example/Example'
+import { App } from './example/App'
 
 const styles = StyleSheet.create({
   container: {
@@ -11,10 +11,10 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function App() {
+export default function ExampleApp() {
   return (
     <SafeAreaView style={styles.container}>
-      <Example />
+      <App />
     </SafeAreaView>
   )
 }

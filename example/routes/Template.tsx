@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useMemo, useState } from 'react'
 import {
@@ -16,14 +17,24 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
+    marginBottom: '2%',
+    textAlign: 'center',
+  },
+  label: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 28,
+  },
+  section: {
+    marginBottom: '3%',
   },
 })
 
 type PayloadType = {
-  route: NavigationRouteKey
-  label: string
-  rand: number
-  getTestString: () => string
+  location: NavigationRouteKey
+  name: string
+  danger: number
+  readSign: () => string
 }
 
 export function Template(props: {
@@ -32,7 +43,7 @@ export function Template(props: {
 }) {
   const numExtraRoutes = 1
   const { label, index } = props
-  const { navigate, to, bg, back, get } = useNavigation()
+  const { navigate, to, bg, back, get, peek } = useNavigation()
   const [test, setTest] = useState('')
   const next = useMemo(
     () => ({
@@ -53,74 +64,109 @@ export function Template(props: {
   )
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={() => {
-          const { route, background } = next
-          const payload = {
-            route,
-            label,
-            rand: Math.random(),
-            getTestString: () => `test func : ${route} ${label}`,
-          }
-          navigate<PayloadType>(route, { background, payload })
-        }}
-      >
-        <Text style={styles.text}>{label}</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          navigate(back, {
-            background: (() => {
-              const bgs = Object.keys(bg)
-              const i =
-                Math.floor(Math.random() * 100) % bgs.length
-              return bgs[i]
-            })(),
-          })
-        }}
-      >
-        <Text style={styles.text}>back</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          setTest('ready')
-        }}
-      >
-        <Text style={styles.text}>
-          {test || 'test dismounting view state'}
-        </Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          try {
+      <View style={styles.section}>
+        <Text style={styles.label}>{label}</Text>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            const { route, background } = next
+            const payload = {
+              location: route,
+              name: label,
+              danger: Math.random(),
+              readSign: () => {
+                const top = `Route: ${route}`
+                const bot = `Location: ${label}`
+                return `${top} | ${bot}`
+              },
+            }
+            navigate<PayloadType>(route, { background, payload })
+          }}
+        >
+          <Text style={styles.text}>explore</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            navigate(back, {
+              background: (() => {
+                const bgs = Object.keys(bg)
+                const r = Math.random() * 100
+                const i = Math.floor(r) % bgs.length
+                return bgs[i]
+              })(),
+            })
+          }}
+        >
+          <Text style={styles.text}>retreat</Text>
+        </Pressable>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            setTest('* you are glowing with a protective aura *')
+          }}
+        >
+          <Text style={styles.text}>
+            {test || 'cast protection'}
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            try {
+              // This is not guarded.
+              type ExpectedPayloadType = PayloadType
+              const payload = get.payload<ExpectedPayloadType>()
+              console.log(payload)
+            } catch (e) {
+              console.log(e)
+            }
+          }}
+        >
+          <Text style={styles.text}>check condition</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
             // This is not guarded.
             type ExpectedPayloadType = PayloadType
-            const payload = get.payload<ExpectedPayloadType>()
-            console.log(payload, payload?.getTestString())
-          } catch (e) {
-            console.log(e)
-          }
+            const payload = get.payload<ExpectedPayloadType>(1)
+            console.log(payload)
+          }}
+        >
+          <Text style={styles.text}>previous condition</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            // This is not guarded.
+            type ExpectedPayloadType = PayloadType
+            const payload = get.payload<ExpectedPayloadType>(2)
+            console.log(payload)
+          }}
+        >
+          <Text style={styles.text}>
+            previous previous condition
+          </Text>
+        </Pressable>
+      </View>
+      <Pressable
+        onPress={() => {
+          // This is not guarded.
+          type ExpectedPayloadType = PayloadType
+          const payload = get.payload<ExpectedPayloadType>()
+          console.log('You pass a sign pointing behind you.')
+          console.log(payload?.readSign())
         }}
       >
-        <Text style={styles.text}>log payload</Text>
+        <Text style={styles.text}>read sign</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          const payload = get.payload(1)
-          console.log(payload, payload?.getTestString())
+          console.log(peek())
         }}
       >
-        <Text style={styles.text}>log previous payload</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          const payload = get.payload(2)
-          console.log(payload, payload?.getTestString())
-        }}
-      >
-        <Text style={styles.text}>
-          log previous previous payload
-        </Text>
+        <Text style={styles.text}>journal</Text>
       </Pressable>
     </View>
   )

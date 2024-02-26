@@ -14,6 +14,7 @@ export const useNavigationContext = <
   routes: RouteGeneric,
   backgrounds?: BackgroundGeneric,
 ) => {
+  /* =^..^=  ✿  =^..^=  */
   const navigate = useCallback(
     <T extends Record<string, any>>(
       to: keyof RouteGeneric,
@@ -22,25 +23,26 @@ export const useNavigationContext = <
         background?: string
       },
     ) => {
+      const { payload, background } = opts || {}
       dispatch({
         type: 'navigate',
         event: {
           to: to as string,
-          payload: opts?.payload,
-          background: opts?.background,
+          payload,
+          background,
         },
       })
     },
     [dispatch],
   )
-
+  /* =^..^=  ✿  =^..^=  */
   const to: Record<keyof RouteGeneric, keyof RouteGeneric> =
     useMemo(() => {
       const keys = Object.keys(routes as any)
       const entries = keys.map((k) => [k, k])
       return Object.fromEntries(entries)
     }, [routes])
-
+  /* =^..^=  ✿  =^..^=  */
   const bg: Record<
     keyof BackgroundGeneric,
     keyof BackgroundGeneric
@@ -49,16 +51,14 @@ export const useNavigationContext = <
     const entries = keys.map((k) => [k, k])
     return Object.fromEntries(entries)
   }, [backgrounds])
-
+  /* =^..^=  ✿  =^..^=  */
   const peek = useCallback(() => {
     const peeked = { ...state }
     Object.freeze(peeked)
     Object.seal(peeked)
     return peeked
   }, [state])
-
-  const back = useMemo(() => backToken, [])
-
+  /* =^..^=  ✿  =^..^=  */
   const payload = useCallback(
     <T>(n?: number) => {
       const $payload = !n
@@ -69,7 +69,9 @@ export const useNavigationContext = <
     },
     [state.history, state.queue],
   )
-
+  /* =^..^=  ✿  =^..^=  */
+  const back = useMemo(() => backToken, [])
+  /* =^..^=  ✿  =^..^=  */
   const ctx = useMemo(
     () => ({
       navigate,
@@ -83,6 +85,6 @@ export const useNavigationContext = <
     }),
     [navigate, peek, to, bg, back, payload],
   )
-
+  /* =^..^=  ✿  =^..^=  */
   return { ctx }
 }

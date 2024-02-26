@@ -5,7 +5,7 @@ import {
 } from './Navigation'
 // import DefaultBackgroundImage from './assets/DefaultBackgroundImage.jpg'
 
-export function Example() {
+export function App() {
   return (
     <NavigationController
       initialRoute="/Home"

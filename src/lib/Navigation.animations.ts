@@ -1,112 +1,23 @@
-import { useMemo, type MutableRefObject } from 'react'
-import { Animated, Easing, EasingFunction } from 'react-native'
-import { type NavigationAnimations } from './Navigation.types'
+import { type MutableRefObject } from 'react'
+import { Animated } from 'react-native'
+import { useTranslateLTR } from './animations'
 
+export const navigationAnimations = {
+  translateLTR: useTranslateLTR,
+} as const
+
+export const NavigationAnimationTypes = Object.fromEntries(
+  Object.keys(navigationAnimations).map((k) => [k, k]),
+) as Record<
+  keyof typeof navigationAnimations,
+  keyof typeof navigationAnimations
+>
+
+/**
+ * Must return an object `{ anims: NavigationAnimations }`
+ */
 export const useNavigationAnimations = (
-  animTranslate: MutableRefObject<Animated.Value>,
-  animOpacity: MutableRefObject<Animated.Value>,
-) => {
-  const baseDur = 420
-
-  const animate = (to: number, easing: EasingFunction) => ({
-    toValue: to,
-    duration: baseDur,
-    easing,
-    useNativeDriver: true,
-  })
-
-  const translateLTR: NavigationAnimations = useMemo(
-    () => ({
-      /* =^..^=  ✿  =^..^=  */
-      backIn: () => {
-        animTranslate.current.setValue(2)
-        return Animated.parallel([
-          Animated.timing(
-            animTranslate.current,
-            animate(1, Easing.in(Easing.exp)),
-          ),
-          Animated.timing(
-            animOpacity.current,
-            animate(1, Easing.inOut(Easing.ease)),
-          ),
-        ])
-      },
-      /* =^..^=  ✿  =^..^=  */
-      backOut: Animated.parallel([
-        Animated.timing(
-          animTranslate.current,
-          animate(-1, Easing.in(Easing.exp)),
-        ),
-        Animated.timing(
-          animOpacity.current,
-          animate(0, Easing.inOut(Easing.ease)),
-        ),
-      ]),
-      /* =^..^=  ✿  =^..^=  */
-      in: Animated.parallel([
-        Animated.timing(
-          animTranslate.current,
-          animate(1, Easing.in(Easing.exp)),
-        ),
-        Animated.timing(
-          animOpacity.current,
-          animate(1, Easing.inOut(Easing.ease)),
-        ),
-      ]),
-      /* =^..^=  ✿  =^..^=  */
-      out: Animated.parallel([
-        Animated.timing(
-          animTranslate.current,
-          animate(2, Easing.in(Easing.exp)),
-        ),
-        Animated.timing(
-          animOpacity.current,
-          animate(0, Easing.inOut(Easing.ease)),
-        ),
-      ]),
-      /* =^..^=  ✿  =^..^=  */
-      error: () => {
-        const stage = (to: number) =>
-          Animated.timing(animTranslate.current, {
-            toValue: to,
-            duration: baseDur / 10,
-            easing: Easing.bounce,
-            useNativeDriver: true,
-          })
-        animTranslate.current.setValue(1)
-        const base = 1
-        const delta = (n: number) => n * (base + 0.04)
-        const lerp = (n: number) =>
-          n + 1 < 0
-            ? base - Math.log10(Math.abs(n - 1))
-            : base + Math.log10(n + 1)
-        return Animated.sequence([
-          stage(lerp(delta(0.05))),
-          stage(lerp(delta(-0.05))),
-          stage(lerp(delta(0.025))),
-          stage(lerp(delta(-0.025))),
-          stage(lerp(delta(0.0125))),
-          stage(lerp(delta(-0.0125))),
-          stage(lerp(delta(0.001))),
-          stage(lerp(delta(-0.001))),
-          stage(base),
-        ])
-      },
-      /* =^..^=  ✿  =^..^=  */
-      reset: (cb?: () => void) => {
-        animTranslate.current.stopAnimation(() => {
-          animTranslate.current.removeAllListeners()
-          animOpacity.current.stopAnimation(() => {
-            animOpacity.current.removeAllListeners()
-            animOpacity.current.setValue(0)
-            animTranslate.current.setValue(0)
-            cb?.()
-          })
-        })
-      },
-      /* =^..^=  ✿  =^..^=  */
-    }),
-    [animOpacity, animTranslate],
-  )
-  return { translateLTR }
-}
+  anim1: MutableRefObject<Animated.Value>,
+  anim2: MutableRefObject<Animated.Value>,
+  type: keyof typeof NavigationAnimationTypes,
+) => navigationAnimations[type](anim1, anim2)

@@ -2,9 +2,9 @@
 const { Template } = require('./Template')
 
 export const Templates = [
-  'one',
-  'two',
-  'three',
-  'four',
-  'five',
+  'Home',
+  'The City',
+  'The Forest',
+  'The Mountain',
+  'The Lake',
 ].map((label, index) => () => Template({ label, index }))
