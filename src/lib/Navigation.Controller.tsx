@@ -27,7 +27,7 @@ import { type NavigationContextType } from './Navigation.types'
 
 export function getNavigationController<
   RouteGeneric,
-  BackgroundGeneric,
+  BackgroundGeneric = any,
 >() {
   /* =^..^=  ✿  =^..^=  */
   type UserRouteKey = keyof Omit<RouteGeneric, typeof backToken>

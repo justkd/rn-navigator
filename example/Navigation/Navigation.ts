@@ -6,4 +6,4 @@ export const { NavigationController, useNavigation } =
   getNavigationController<
     typeof navigationRouteKeys,
     typeof navigationBackgrounds
-  >() || {}
+  >()

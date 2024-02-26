@@ -1,7 +1,7 @@
 {
-  "name": "@justkd/template-expo-ts-npm-publish",
+  "name": "@justkd/rn-navigator",
   "author": "Cadence Holmes, @justkd",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "description": "",
   "keywords": [
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/justkd/template-expo-ts-npm-publish"
+    "url": "https://github.com/justkd/rn-navigator"
   },
   "scripts": {
     "publish:private": "npm publish",
@@ -26,7 +26,7 @@
   "dependencies": {},
   "devDependencies": {},
   "files": [
-    "lib",
+    "src",
     "index.d.ts",
     "index.d.ts.map",
     "index.js",
