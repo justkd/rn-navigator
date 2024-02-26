@@ -4,7 +4,7 @@ import {
   type DispatchAction,
   type NavigationAnimations,
 } from './Navigation.types'
-import { backToken, navDirTokens } from './Navigation.tokens'
+import { backToken } from './Navigation.tokens'
 
 type LocallyDependentProps = {
   topLevelController: boolean

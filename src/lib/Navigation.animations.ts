@@ -2,18 +2,19 @@ import { useMemo, type MutableRefObject } from 'react'
 import { Animated, Easing, EasingFunction } from 'react-native'
 import { type NavigationAnimations } from './Navigation.types'
 
-export const navAnimBaseDur = 420
-
 export const useNavigationAnimations = (
   animTranslate: MutableRefObject<Animated.Value>,
   animOpacity: MutableRefObject<Animated.Value>,
 ) => {
+  const baseDur = 420
+
   const animate = (to: number, easing: EasingFunction) => ({
     toValue: to,
-    duration: navAnimBaseDur,
+    duration: baseDur,
     easing,
     useNativeDriver: true,
   })
+
   const translateLTR: NavigationAnimations = useMemo(
     () => ({
       /* =^..^=  ✿  =^..^=  */
@@ -68,7 +69,7 @@ export const useNavigationAnimations = (
         const stage = (to: number) =>
           Animated.timing(animTranslate.current, {
             toValue: to,
-            duration: navAnimBaseDur / 10,
+            duration: baseDur / 10,
             easing: Easing.bounce,
             useNativeDriver: true,
           })
