@@ -12,5 +12,6 @@ import { type NavigationAnimations } from '../Navigation.types';
  */
 export declare const useTranslateLTR: (animTranslate: MutableRefObject<Animated.Value>, animOpacity: MutableRefObject<Animated.Value>) => {
     anims: NavigationAnimations;
+    baseDur: number;
 };
 //# sourceMappingURL=translateLTR.d.ts.map

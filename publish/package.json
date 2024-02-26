@@ -1,7 +1,7 @@
 {
   "name": "@justkd/testy-test",
   "author": "Cadence Holmes, @justkd",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "scripts": {
     "publish:private": "npm publish",

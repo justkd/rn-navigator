@@ -166,7 +166,7 @@ export function App() {
 
 ```
 export function Home() {
-    const { navigate, to, bg, back, get, peek } = useNavigation()
+    const { navigate, to, bg, back, navigator } = useNavigation()
     
     const onPress = () => {
         navigate(to['/A'], { background: bg['one'] })
@@ -183,6 +183,8 @@ export function Home() {
         const background = bg['one']
 
         navigate<PayloadType>(route, { background, payload })
+
+        // console.log( navigator.payload() )
         */
     }
 

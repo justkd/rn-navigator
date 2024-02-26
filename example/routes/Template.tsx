@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
 })
 
 type PayloadType = {
-  location: NavigationRouteKey
-  name: string
-  danger: number
-  readSign: () => string
+  currentRoute: NavigationRouteKey
+  previousLabel: string
+  dangerLevel: number
+  readSign: () => void
 }
 
 export function Template(props: {
@@ -51,6 +51,12 @@ export function Template(props: {
         const keys = Object.keys(to)
         const length = keys.length - numExtraRoutes
         const k = keys[(index + 1) % length]
+        return (to as any)[k]
+      })(),
+      ahead: (() => {
+        const keys = Object.keys(to)
+        const length = keys.length - numExtraRoutes
+        const k = keys[(index + 2) % length]
         return (to as any)[k]
       })(),
       background: (() => {
@@ -70,15 +76,16 @@ export function Template(props: {
       <View style={styles.section}>
         <Pressable
           onPress={() => {
-            const { route, background } = next
+            const { route, background, ahead } = next
             const payload = {
-              location: route,
-              name: label,
-              danger: Math.random(),
+              currentRoute: route,
+              previousLabel: label,
+              dangerLevel: Math.random(),
               readSign: () => {
-                const top = `Route: ${route}`
-                const bot = `Location: ${label}`
-                return `${top} | ${bot}`
+                const d =
+                  'You pass a sign pointing ahead of you.'
+                console.log(d)
+                console.log(`Next Route: ${ahead}`)
               },
             }
             navigate<PayloadType>(route, { background, payload })
@@ -126,7 +133,7 @@ export function Template(props: {
             }
           }}
         >
-          <Text style={styles.text}>check condition</Text>
+          <Text style={styles.text}>look around</Text>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -137,7 +144,7 @@ export function Template(props: {
             console.log(payload)
           }}
         >
-          <Text style={styles.text}>previous condition</Text>
+          <Text style={styles.text}>look behind you</Text>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -148,9 +155,7 @@ export function Template(props: {
             console.log(payload)
           }}
         >
-          <Text style={styles.text}>
-            previous previous condition
-          </Text>
+          <Text style={styles.text}>look far behind you</Text>
         </Pressable>
       </View>
       <Pressable
@@ -159,8 +164,8 @@ export function Template(props: {
           type ExpectedPayloadType = PayloadType
           const payload =
             navigator.payload<ExpectedPayloadType>()
-          console.log('You pass a sign pointing behind you.')
-          console.log(payload?.readSign())
+          if (payload) payload.readSign()
+          else console.log('There is no sign.')
         }}
       >
         <Text style={styles.text}>read sign</Text>
@@ -170,7 +175,7 @@ export function Template(props: {
           console.log(navigator.peek())
         }}
       >
-        <Text style={styles.text}>journal</Text>
+        <Text style={styles.text}>check journal</Text>
       </Pressable>
       <Pressable
         onPress={() => {
@@ -186,7 +191,7 @@ export function Template(props: {
           })
         }}
       >
-        <Text style={styles.text}>teleport</Text>
+        <Text style={styles.text}>alter history</Text>
       </Pressable>
     </View>
   )
