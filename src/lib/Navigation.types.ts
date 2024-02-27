@@ -92,6 +92,7 @@ export type NavigationContextType<
     peek: () => NavigationState
     clear: (background?: string) => void
     payload: <T extends GenericObj>(n?: number) => T | null
+    route: (n?: number) => string | null
     set: (next: Partial<NavigationState>) => void
   }
 }

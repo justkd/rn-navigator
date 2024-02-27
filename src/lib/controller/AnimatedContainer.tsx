@@ -1,6 +1,6 @@
 import { useMemo, type ComponentType } from 'react'
 import { Animated, useWindowDimensions } from 'react-native'
-import { NavigationErrorView } from '../Navigation.ErrorView'
+import { NavigationErrorView } from '../error/Navigation.ErrorView'
 import { type NavigationState } from '../Navigation.types'
 
 export function AnimatedContainer<
