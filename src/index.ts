@@ -7,4 +7,4 @@ export {
   type NavigationBackground,
   type GetTypedRouteKeys,
 } from './lib/Navigation.types'
-export { getNavigationController } from './lib/Navigation.Controller'
+export { getNavigationController } from './lib/controller'
