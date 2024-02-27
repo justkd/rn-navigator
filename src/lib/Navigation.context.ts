@@ -193,7 +193,10 @@ export const useNavigationContext = <
    * })
    */
   const back = useMemo(() => backToken, [])
-  /* =^..^=  ✿  =^..^=  */
+
+  /**
+   * Object holding several navigation utility methods.
+   */
   const navigator = useMemo(
     () => ({
       peek,
