@@ -44,7 +44,7 @@ export const useTranslateLTR = (
       backOut: Animated.parallel([
         Animated.timing(
           animTranslate.current,
-          animate(-1, Easing.in(Easing.exp)),
+          animate(-1, Easing.inOut(Easing.exp)),
         ),
         Animated.timing(
           animOpacity.current,
@@ -55,7 +55,7 @@ export const useTranslateLTR = (
       in: Animated.parallel([
         Animated.timing(
           animTranslate.current,
-          animate(1, Easing.in(Easing.exp)),
+          animate(1, Easing.inOut(Easing.exp)),
         ),
         Animated.timing(
           animOpacity.current,
@@ -66,7 +66,7 @@ export const useTranslateLTR = (
       out: Animated.parallel([
         Animated.timing(
           animTranslate.current,
-          animate(2, Easing.in(Easing.exp)),
+          animate(2, Easing.inOut(Easing.exp)),
         ),
         Animated.timing(
           animOpacity.current,
