@@ -18,6 +18,7 @@ export declare const useNavigationContext: <RouteGeneric, BackgroundGeneric>(sta
             };
             clear: (background?: string) => void;
             payload: <T_1>(n?: number) => T_1 | null;
+            route: (n?: number) => string | null;
             set: (next: Partial<NavigationState>) => void;
         };
     };

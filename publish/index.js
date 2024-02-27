@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.dummyfn=void 0;var lib_1=require("./lib");Object.defineProperty(exports,"dummyfn",{enumerable:!0,get:function(){return lib_1.dummyfn}});

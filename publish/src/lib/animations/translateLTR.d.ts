@@ -4,7 +4,9 @@ import { type NavigationAnimations } from '../Navigation.types';
 /**
  * Animation collection for a given navigation transition style.
  * All of these should be in hook format that returns an object
- * `{ anims: NavigationAnimations }`
+ * `{ anims: NavigationAnimations, baseDur: number }`. `baseDur`
+ * is the duration of a single transition animation (half of a
+ * transition).
  * @note
  * Adding other animation types might need some reworking of how
  * anim refs are being passed and handled. I can imagine a transition

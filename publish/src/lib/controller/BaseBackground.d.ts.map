@@ -1,0 +1,1 @@
+{"version":3,"file":"BaseBackground.d.ts","sourceRoot":"","sources":["../../../../src/lib/controller/BaseBackground.tsx"],"names":[],"mappings":"AAAA,OAAO,EAEL,KAAK,mBAAmB,EACxB,KAAK,SAAS,EACf,MAAM,cAAc,CAAA;AAErB,wBAAgB,cAAc,CAAC,KAAK,EAAE;IACpC,oBAAoB,EAAE,SAAS,CAAA;IAC/B,eAAe,CAAC,EAAE,SAAS,CAAC,iBAAiB,CAAC,CAAA;IAC9C,eAAe,CAAC,EAAE,mBAAmB,CAAA;CACtC,2CAcA"}
