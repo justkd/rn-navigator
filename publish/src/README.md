@@ -7,6 +7,7 @@ predefined backgrounds or background colors.
 
 Each route is just a route key you assign to a given component. These should each be top level components for the intended route.
 
+## Example
 ```
 const { 
   navigate, 
