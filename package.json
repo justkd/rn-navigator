@@ -1,6 +1,6 @@
 {
-  "name": "template-expo-ts-npm-publish",
-  "version": "1.0.0",
+  "name": "rn-navigator",
+  "version": "0.1.6",
   "main": "./node_modules/expo/AppEntry",
   "keywords": [
     "rn",
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/justkd/template-expo-ts-npm-publish"
+    "url": "https://github.com/justkd/rn-navigator"
   },
   "license": "MIT",
   "scripts": {
@@ -19,12 +19,12 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build": "npm run build:lib && npm run build:copy && npm run build:minify",
-    "build:lib": "rm ./publish/lib -d -r -f && npx tsc",
-    "build:copy": "cp README.md publish && cp LICENSE publish",
+    "build": "npm run build:src && npm run build:copy && npm run build:minify",
+    "build:src": "rm ./publish/src -d -r -f && npx tsc && rm ./publish/example -d -r -f",
+    "build:copy": "cp README.md publish/src && cp LICENSE publish/src && cd publish && cp package.json src",
     "build:minify": "npx minify-all-js ./publish",
-    "publish:private": "cd publish && npm run publish:private",
-    "publish:public": "cd publish && npm run publish:public"
+    "publish:private": "cd publish/src && npm run publish:private",
+    "publish:public": "cd publish/src && npm run publish:public"
   },
   "dependencies": {
     "@expo/cli": "^0.6.2",

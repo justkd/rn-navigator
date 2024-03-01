@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.useTranslateLTR=void 0;var translateLTR_1=require("./translateLTR");Object.defineProperty(exports,"useTranslateLTR",{enumerable:!0,get:function(){return translateLTR_1.useTranslateLTR}});

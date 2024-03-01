@@ -18,20 +18,38 @@ export function navigationReducer(
       }
     }
     /* =^..^=  ✿  =^..^=  */
+    case 'set': {
+      const next = action.event as Partial<NavigationState>
+      return {
+        ...state,
+        ...next,
+      }
+    }
+    /* =^..^=  ✿  =^..^=  */
+    case 'clear': {
+      return {
+        queue: [] as NavigationState['queue'],
+        history: [] as NavigationState['history'],
+        isNavigating: null,
+        background: undefined,
+      }
+    }
+    /* =^..^=  ✿  =^..^=  */
     case 'navigate': {
       const event =
         action?.event && typeof action?.event !== 'string'
-          ? action?.event
+          ? (action?.event as NavigationEvent)
           : null
       const background =
-        typeof action.event !== 'string'
+        typeof action.event !== 'string' &&
+        typeof action.event !== 'boolean'
           ? action.event?.background
           : undefined
       const whichBackType = state.history.length
         ? navDirTokens.back
         : navDirTokens.error
       const isNavigating =
-        event?.to === backToken
+        typeof event !== 'boolean' && event?.to === backToken
           ? whichBackType
           : navDirTokens.fwd
       return event
@@ -44,7 +62,7 @@ export function navigationReducer(
         : state
     }
     /* =^..^=  ✿  =^..^=  */
-    case 'end_navigation': {
+    case 'end_navigation_animation': {
       return {
         ...state,
         isNavigating: null,
@@ -86,7 +104,9 @@ export function navigationReducer(
     }
     /* =^..^=  ✿  =^..^=  */
     default: {
-      throw Error(`Unknown action: ${action.type}`)
+      throw Error(
+        `rn-navigator : unknown navigation action : ${action.type}`,
+      )
     }
     /* =^..^=  ✿  =^..^=  */
   }

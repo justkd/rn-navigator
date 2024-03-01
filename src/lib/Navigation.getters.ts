@@ -1,5 +1,5 @@
 import { backToken } from './Navigation.tokens'
-
+/* =^..^=  ✿  =^..^=  */
 export const getTypedRoutes = <T extends Record<any, any>>(
   routes: T,
 ) => {
@@ -8,7 +8,7 @@ export const getTypedRoutes = <T extends Record<any, any>>(
   const $routes = Object.fromEntries($entries) as T
   return { navigationRoutes: $routes }
 }
-
+/* =^..^=  ✿  =^..^=  */
 export const getTypedBackgrounds = <T extends Record<any, any>>(
   backgrounds: T,
 ) => {
@@ -20,7 +20,7 @@ export const getTypedBackgrounds = <T extends Record<any, any>>(
     navigationBackgrounds: backgrounds,
   }
 }
-
+/* =^..^=  ✿  =^..^=  */
 export const getTypedRouteKeys = <T extends readonly string[]>(
   arr: T,
 ) => {
@@ -37,3 +37,4 @@ export const getTypedRouteKeys = <T extends readonly string[]>(
     typeof back
   return { navigationRouteKeys }
 }
+/* =^..^=  ✿  =^..^=  */

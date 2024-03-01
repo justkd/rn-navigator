@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { useMemo, useState } from 'react'
 import {
@@ -16,14 +17,24 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
+    marginBottom: '2%',
+    textAlign: 'center',
+  },
+  label: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 28,
+  },
+  section: {
+    marginBottom: '3%',
   },
 })
 
 type PayloadType = {
-  route: NavigationRouteKey
-  label: string
-  rand: number
-  getTestString: () => string
+  currentRoute: NavigationRouteKey
+  previousLabel: string
+  dangerLevel: number
+  readSign: () => void
 }
 
 export function Template(props: {
@@ -32,7 +43,7 @@ export function Template(props: {
 }) {
   const numExtraRoutes = 1
   const { label, index } = props
-  const { navigate, to, bg, back, get } = useNavigation()
+  const { navigate, to, bg, back, navigator } = useNavigation()
   const [test, setTest] = useState('')
   const next = useMemo(
     () => ({
@@ -40,6 +51,12 @@ export function Template(props: {
         const keys = Object.keys(to)
         const length = keys.length - numExtraRoutes
         const k = keys[(index + 1) % length]
+        return (to as any)[k]
+      })(),
+      ahead: (() => {
+        const keys = Object.keys(to)
+        const length = keys.length - numExtraRoutes
+        const k = keys[(index + 2) % length]
         return (to as any)[k]
       })(),
       background: (() => {
@@ -53,74 +70,128 @@ export function Template(props: {
   )
   return (
     <View style={styles.container}>
+      <View style={styles.section}>
+        <Text style={styles.label}>{label}</Text>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            const { route, background, ahead } = next
+            const payload = {
+              currentRoute: route,
+              previousLabel: label,
+              dangerLevel: Math.random(),
+              readSign: () => {
+                const d =
+                  'You pass a sign pointing ahead of you.'
+                console.log(d)
+                console.log(`Next Route: ${ahead}`)
+              },
+            }
+            navigate<PayloadType>(route, { background, payload })
+          }}
+        >
+          <Text style={styles.text}>explore</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            navigate(back, {
+              background: (() => {
+                const bgs = Object.keys(bg)
+                const r = Math.random() * 100
+                const i = Math.floor(r) % bgs.length
+                return bgs[i]
+              })(),
+            })
+          }}
+        >
+          <Text style={styles.text}>retreat</Text>
+        </Pressable>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            setTest('* you are glowing with a protective aura *')
+          }}
+        >
+          <Text style={styles.text}>
+            {test || 'cast protection'}
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.section}>
+        <Pressable
+          onPress={() => {
+            try {
+              // This is not guarded.
+              type ExpectedPayloadType = PayloadType
+              const payload =
+                navigator.payload<ExpectedPayloadType>()
+              console.log(payload)
+            } catch (e) {
+              console.log(e)
+            }
+          }}
+        >
+          <Text style={styles.text}>look around</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            // This is not guarded.
+            type ExpectedPayloadType = PayloadType
+            const payload =
+              navigator.payload<ExpectedPayloadType>(1)
+            console.log(payload)
+          }}
+        >
+          <Text style={styles.text}>look behind you</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            // This is not guarded.
+            type ExpectedPayloadType = PayloadType
+            const payload =
+              navigator.payload<ExpectedPayloadType>(2)
+            console.log(payload)
+          }}
+        >
+          <Text style={styles.text}>look far behind you</Text>
+        </Pressable>
+      </View>
       <Pressable
         onPress={() => {
-          const { route, background } = next
-          const payload = {
-            route,
-            label,
-            rand: Math.random(),
-            getTestString: () => `test func : ${route} ${label}`,
-          }
-          navigate<PayloadType>(route, { background, payload })
+          // This is not guarded.
+          type ExpectedPayloadType = PayloadType
+          const payload =
+            navigator.payload<ExpectedPayloadType>()
+          if (payload) payload.readSign()
+          else console.log('There is no sign.')
         }}
       >
-        <Text style={styles.text}>{label}</Text>
+        <Text style={styles.text}>read sign</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          navigate(back, {
-            background: (() => {
-              const bgs = Object.keys(bg)
-              const i =
-                Math.floor(Math.random() * 100) % bgs.length
-              return bgs[i]
-            })(),
+          console.log(navigator.peek())
+        }}
+      >
+        <Text style={styles.text}>check journal</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigator.clear()
+        }}
+      >
+        <Text style={styles.text}>teleport</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigator.set({
+            history: [{ to: '/A' }],
           })
         }}
       >
-        <Text style={styles.text}>back</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          setTest('ready')
-        }}
-      >
-        <Text style={styles.text}>
-          {test || 'test dismounting view state'}
-        </Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          try {
-            // This is not guarded.
-            type ExpectedPayloadType = PayloadType
-            const payload = get.payload<ExpectedPayloadType>()
-            console.log(payload, payload?.getTestString())
-          } catch (e) {
-            console.log(e)
-          }
-        }}
-      >
-        <Text style={styles.text}>log payload</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          const payload = get.payload(1)
-          console.log(payload, payload?.getTestString())
-        }}
-      >
-        <Text style={styles.text}>log previous payload</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          const payload = get.payload(2)
-          console.log(payload, payload?.getTestString())
-        }}
-      >
-        <Text style={styles.text}>
-          log previous previous payload
-        </Text>
+        <Text style={styles.text}>alter history</Text>
       </Pressable>
     </View>
   )

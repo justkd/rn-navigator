@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.navDirTokens=exports.backToken=void 0,exports.backToken="BACK.TOKEN",exports.navDirTokens={back:"back",fwd:"fwd",error:"error"};

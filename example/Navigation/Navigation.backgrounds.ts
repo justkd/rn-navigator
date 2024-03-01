@@ -1,7 +1,4 @@
-import {
-  getTypedBackgrounds,
-  type NavigationBackground,
-} from '../../src'
+import { getTypedBackgrounds } from '../../src'
 /* ******************** */
 import ImageOne from './assets/1.jpg'
 import ImageTwo from './assets/2.jpg'
@@ -10,7 +7,7 @@ import ImageFour from './assets/4.jpg'
 import ImageFive from './assets/5.jpg'
 import ImageSix from './assets/6.jpg'
 /* ******************** */
-const backgrounds: Record<string, NavigationBackground> = {
+const backgrounds = {
   one: { image: { source: ImageOne } },
   two: { image: { source: ImageTwo } },
   three: { image: { source: ImageThree } },
@@ -27,7 +24,7 @@ const backgrounds: Record<string, NavigationBackground> = {
   black: { color: 'black' },
   blue: { color: 'blue' },
   cyan: { color: 'cyan' },
-}
+} as const
 /* ******************** */
 export const {
   navigationBackgrounds,
