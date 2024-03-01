@@ -10,7 +10,7 @@ export declare const navigationAnimations: {
     };
 };
 /**
- * Ensure animation type keys are stronlgy typed.
+ * Ensure animation type keys are strongly typed.
  */
 export declare const NavigationAnimationTypes: Record<"translateLTR", "translateLTR">;
 /**
