@@ -2,12 +2,13 @@ import { useCallback, useMemo, type Dispatch } from 'react'
 import {
   type NavigationState,
   type DispatchAction,
+  UseNavigationReturnType,
 } from './Navigation.types'
 import { backToken } from './Navigation.tokens'
 
 export const useNavigationContext = <
-  RouteGeneric,
-  BackgroundGeneric,
+  RouteGeneric extends string | number | symbol,
+  BackgroundGeneric extends string | number | symbol,
 >(
   state: NavigationState,
   dispatch: Dispatch<DispatchAction>,
@@ -120,7 +121,10 @@ export const useNavigationContext = <
     [payload, peek, reset, set, route],
   )
   /* =^..^=  ✿  =^..^=  */
-  const ctx = useMemo(
+  const ctx: UseNavigationReturnType<
+    keyof RouteGeneric,
+    keyof BackgroundGeneric
+  > = useMemo(
     () => ({
       navigate,
       to,

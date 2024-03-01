@@ -1,3 +1,4 @@
+import { type ComponentType } from 'react'
 import {
   type Animated,
   type ViewStyle,
@@ -26,6 +27,35 @@ type NavigateFn<R> = <T extends GenericObj>(
   },
 ) => void
 
+export type NavigationAnimation = Animated.CompositeAnimation
+
+export type NavigationAnimationFunction =
+  () => Animated.CompositeAnimation
+
+export type DispatchAction = {
+  type: string
+  event?:
+    | string
+    | boolean
+    | NavigationEvent
+    | Partial<NavigationState>
+}
+
+/**
+ * Type representing the props for `NavigationController`.
+ */
+export interface NavigationControllerProps<
+  R extends string | number | symbol,
+  B,
+> {
+  routes: Record<R, ComponentType>
+  initialRoute: R
+  backgroundColor?: ViewStyle['backgroundColor']
+  backgroundImage?: ImageSourcePropType
+  backgrounds?: B
+  topLevelController?: boolean
+}
+
 /**
  * @type
  * Used to ensure the user generated route keys type does not include
@@ -34,12 +64,8 @@ type NavigateFn<R> = <T extends GenericObj>(
  */
 export type GetTypedRouteKeys<T> = Omit<T, BackToken>
 
-export type NavigationAnimation = Animated.CompositeAnimation
-
-export type NavigationAnimationFunction =
-  () => Animated.CompositeAnimation
-
 /**
+ * @type
  * All animation keys must be accounted for when adding
  * a new animation type (eg. `translateLTR`).
  */
@@ -53,6 +79,7 @@ export type NavigationAnimations = {
 }
 
 /**
+ * @type
  * Represents a background object when defining navigation backgrounds.
  */
 export type NavigationBackground = {
@@ -64,21 +91,20 @@ export type NavigationBackground = {
   }
 }
 
-export type DispatchAction = {
-  type: string
-  event?:
-    | string
-    | boolean
-    | NavigationEvent
-    | Partial<NavigationState>
-}
-
+/**
+ * @type
+ * Type representing the values stored in the navigation queue and history.
+ */
 export type NavigationEvent = {
   to: string
   payload?: Record<string, any>
   background?: string
 }
 
+/**
+ * @type
+ * Type representing the internal navigation state.
+ */
 export type NavigationState = {
   queue: NavigationEvent[]
   history: NavigationEvent[]
@@ -86,6 +112,10 @@ export type NavigationState = {
   background?: string
 }
 
+/**
+ * @type
+ * Type representing the values returned by the `useNavigation` hook.
+ */
 export type UseNavigationReturnType<
   R extends string | number | symbol,
   B extends string | number | symbol,
@@ -104,6 +134,23 @@ export type UseNavigationReturnType<
    *   },
    *   background: bg['imageKey']
    * })
+   * @example
+   * const { navigate, back, bg, navigator } = useNavigation()
+   *
+   * type PayloadType = {
+   *   item1: number
+   *   item2: string
+   * }
+   *
+   * navigate<PayloadType>(back, {
+   *   payload: {
+   *     item1: 1,
+   *     item2: '2'
+   *   },
+   *   background: bg['imageKey']
+   * })
+   *
+   * console.log( navigator.peek() )
    */
   navigate: NavigateFn<R>
 
