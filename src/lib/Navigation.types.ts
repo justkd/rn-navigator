@@ -24,9 +24,9 @@ export type NavigationAnimationFunction =
 export type NavigationAnimations = {
   in: NavigationAnimation
   out: NavigationAnimation
-  error: NavigationAnimationFunction
-  backOut: NavigationAnimation
   backIn: NavigationAnimationFunction
+  backOut: NavigationAnimation
+  error: NavigationAnimationFunction
   reset: (cb?: () => void) => void
 }
 
