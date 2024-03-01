@@ -10,7 +10,6 @@ import {
   Animated,
   StyleSheet,
   useWindowDimensions,
-  type ImageSourcePropType,
   type ViewStyle,
 } from 'react-native'
 import {
@@ -24,7 +23,10 @@ import { backToken } from '../Navigation.tokens'
 import { BaseBackground } from './BaseBackground'
 import { Backgrounds } from './Backgrounds'
 import { AnimatedContainer } from './AnimatedContainer'
-import { type NavigationContextType } from '../Navigation.types'
+import {
+  type UseNavigationReturnType,
+  type NavigationControllerProps,
+} from '../Navigation.types'
 
 const styles = StyleSheet.create({
   background: {
@@ -38,6 +40,10 @@ const styles = StyleSheet.create({
   },
 })
 
+/**
+ * Returns a function component representing the `NavigationController`
+ * and a `useNavigation` hook specific to that controller.
+ */
 export function getNavigationController<
   RouteGeneric,
   BackgroundGeneric = any,
@@ -45,27 +51,62 @@ export function getNavigationController<
   /* =^..^=  ✿  =^..^=  */
   type Routes = Record<keyof RouteGeneric, ComponentType>
   type UserRouteKey = keyof Omit<RouteGeneric, typeof backToken>
-  type NCT = NavigationContextType<
+  type NCT = UseNavigationReturnType<
     keyof RouteGeneric,
     keyof BackgroundGeneric
   >
   const NavigationContext = createContext<NCT>(null as any)
   /* =^..^=  ✿  =^..^=  */
   return {
-    /* =^..^=  ✿  =^..^=  */
+    /**
+     * Hook generated in your own navigation file after setting up
+     * `@justkd/rn-navigator`. Returns an object `UseNavigationReturnType<R, B>`
+     * with navigation and utility functions and helpers.
+     * @example
+     * import { useNavigation } from 'your_project_path_to/Your_Navigation.ts'
+     * const { navigate, to, bg, back, navigator } = useNavigation()
+     * @example
+     * const { navigate, to } = useNavigation()
+     * navigate(to['/Home'])
+     * @example
+     * const { navigate, to, bg } = useNavigation()
+     * navigate(to['/Home'], {
+     *   payload: {
+     *     item: 1,
+     *     item: '2'
+     *   },
+     *   background: bg['imageKey']
+     * })
+     * @example
+     * const { navigate, back, bg, navigator } = useNavigation()
+     *
+     * type PayloadType = {
+     *   item1: number
+     *   item2: string
+     * }
+     *
+     * navigate<PayloadType>(back, {
+     *   payload: {
+     *     item1: 1,
+     *     item2: '2'
+     *   },
+     *   background: bg['imageKey']
+     * })
+     *
+     * console.log( navigator.peek() )
+     */
     useNavigation() {
       const ctx = NavigationContext
       return useContext(ctx)
     },
+
     /* =^..^=  ✿  =^..^=  */
-    NavigationController(props: {
-      routes: Record<UserRouteKey, ComponentType>
-      initialRoute: UserRouteKey
-      backgroundColor?: ViewStyle['backgroundColor']
-      backgroundImage?: ImageSourcePropType
-      backgrounds?: BackgroundGeneric
-      topLevelController?: boolean
-    }) {
+    NavigationController(
+      props: NavigationControllerProps<
+        UserRouteKey,
+        BackgroundGeneric
+      >,
+    ) {
       const {
         routes,
         initialRoute,

@@ -20,6 +20,17 @@ export function AnimatedContainer<
     return Current ? <Current /> : <NavigationErrorView />
   }, [routes, state])
   /* =^..^=  ✿  =^..^=  */
+  const transform = useMemo(
+    () => [
+      {
+        translateX: animT.interpolate({
+          inputRange: [0, 1],
+          outputRange: [width, 0],
+        }),
+      },
+    ],
+    [animT, width],
+  )
   /* Nav animation container. */
   return (
     <Animated.View
@@ -27,14 +38,7 @@ export function AnimatedContainer<
         height: '100%',
         width: '100%',
         opacity: animO,
-        transform: [
-          {
-            translateX: animT.interpolate({
-              inputRange: [0, 1],
-              outputRange: [width, 0],
-            }),
-          },
-        ],
+        transform,
       }}
     >
       {CurrentView}

@@ -63,7 +63,7 @@ export const useNavigationHooks = (
   useEffect(
     // on dismount NavigationController
     () => () => {
-      if (!props.topLevelController) return
+      if (props.topLevelController) return
       const msg =
         'Your broke it.' +
         ' A top level navigation controller was dismounted.' +
@@ -78,7 +78,7 @@ export const useNavigationHooks = (
     // on mount NavigationController
     animations.in.start()
     return () => {
-      if (!props.topLevelController) return
+      if (props.topLevelController) return
       const msg =
         'Your broke it.' +
         ' A top level navigation controller was dismounted.' +

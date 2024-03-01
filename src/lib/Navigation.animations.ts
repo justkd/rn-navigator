@@ -10,7 +10,7 @@ export const navigationAnimations = {
 } as const
 
 /**
- * Ensure animation type keys are stronlgy typed.
+ * Ensure animation type keys are strongly typed.
  */
 export const NavigationAnimationTypes = Object.fromEntries(
   Object.keys(navigationAnimations).map((k) => [k, k]),
