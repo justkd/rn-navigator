@@ -1,9 +1,57 @@
-# @justkd/rn-navigator
+# [@justkd/rn-navigator](https://github.com/justkd/rn-navigator)
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/justkd/rn-navigator/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/justkd/rn-navigator/tree/main)
 
 React Native navigation with stateful transition animations leveraging
 predefined backgrounds or background colors.
 
 Each route is just a route key you assign to a given component. These should each be top level components for the intended route.
+
+```
+const { 
+  navigate, 
+  to, 
+  back 
+} = useNavigation()
+
+navigate(to['/Home])
+
+navigate(back)
+```
+
+![image](https://github.com/justkd/rn-navigator/blob/main/assets/rn-navigator.gif?raw=true)
+
+```
+const { 
+  navigate, 
+  navigator,
+  to, 
+  bg
+} = useNavigation()
+
+navigate(to.Last, { 
+   background: bg.one,
+   payload: { data: [] }
+})
+
+console.log( navigator.payload() )
+```
+
+# TODO
+
+- tests 😒
+- other animation options
+- skip animation
+- less setup
+
+## Install
+
+```
+npm i @justkd/rn-navigator
+```
+```
+yarn add @justkd/rn-navigator
+```
 
 ## Setup
 
