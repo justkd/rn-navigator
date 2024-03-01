@@ -1,5 +1,9 @@
 import { backToken } from './Navigation.tokens'
 /* =^..^=  ✿  =^..^=  */
+/**
+ * Uses the values returned from the other getters and returns
+ * a strongly typed object holding all navigation routes.
+ */
 export const getTypedRoutes = <T extends Record<any, any>>(
   routes: T,
 ) => {
@@ -8,7 +12,10 @@ export const getTypedRoutes = <T extends Record<any, any>>(
   const $routes = Object.fromEntries($entries) as T
   return { navigationRoutes: $routes }
 }
-/* =^..^=  ✿  =^..^=  */
+
+/**
+ * Ensures the background key helper is strongly typed.
+ */
 export const getTypedBackgrounds = <T extends Record<any, any>>(
   backgrounds: T,
 ) => {
@@ -20,7 +27,14 @@ export const getTypedBackgrounds = <T extends Record<any, any>>(
     navigationBackgrounds: backgrounds,
   }
 }
-/* =^..^=  ✿  =^..^=  */
+
+/**
+ * Adds the internal back token to the user route keys.
+ * The back token won't be included in the exposed type,
+ * but the navigate fn will still accept it from the `back`
+ * helper returned by `useNavigation`. The route keys will
+ * also be strongly typed.
+ */
 export const getTypedRouteKeys = <T extends readonly string[]>(
   arr: T,
 ) => {

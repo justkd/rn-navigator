@@ -26,6 +26,12 @@ type NavigateFn<R> = <T extends GenericObj>(
   },
 ) => void
 
+/**
+ * @type
+ * Used to ensure the user generated route keys type does not include
+ * the internal back token. The back token is still accepted by
+ * the navigate fn, and the route keys will be strongly typed.
+ */
 export type GetTypedRouteKeys<T> = Omit<T, BackToken>
 
 export type NavigationAnimation = Animated.CompositeAnimation
@@ -46,6 +52,9 @@ export type NavigationAnimations = {
   reset: (cb?: () => void) => void
 }
 
+/**
+ * Represents a background object when defining navigation backgrounds.
+ */
 export type NavigationBackground = {
   color?: ViewStyle['backgroundColor']
   image?: {
@@ -77,7 +86,7 @@ export type NavigationState = {
   background?: string
 }
 
-export type NavigationContextType<
+export type UseNavigationReturnType<
   R extends string | number | symbol,
   B extends string | number | symbol,
 > = {

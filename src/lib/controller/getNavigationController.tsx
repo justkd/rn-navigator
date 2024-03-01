@@ -24,7 +24,7 @@ import { backToken } from '../Navigation.tokens'
 import { BaseBackground } from './BaseBackground'
 import { Backgrounds } from './Backgrounds'
 import { AnimatedContainer } from './AnimatedContainer'
-import { type NavigationContextType } from '../Navigation.types'
+import { type UseNavigationReturnType } from '../Navigation.types'
 
 const styles = StyleSheet.create({
   background: {
@@ -38,6 +38,10 @@ const styles = StyleSheet.create({
   },
 })
 
+/**
+ * Returns a function component representing the `NavigationController`
+ * and a `useNavigation` hook specific to that controller.
+ */
 export function getNavigationController<
   RouteGeneric,
   BackgroundGeneric = any,
@@ -45,7 +49,7 @@ export function getNavigationController<
   /* =^..^=  ✿  =^..^=  */
   type Routes = Record<keyof RouteGeneric, ComponentType>
   type UserRouteKey = keyof Omit<RouteGeneric, typeof backToken>
-  type NCT = NavigationContextType<
+  type NCT = UseNavigationReturnType<
     keyof RouteGeneric,
     keyof BackgroundGeneric
   >
