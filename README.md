@@ -13,7 +13,9 @@ const {
   to, 
   back 
 } = useNavigation()
+
 navigate(to['/Home])
+
 navigate(back)
 ```
 
