@@ -20,7 +20,7 @@ navigate(to['/Home])
 navigate(back)
 ```
 
-![image](https://github.com/justkd/rn-navigator/blob/main/assets/rn-navigator.gif?raw=true)
+![image](https://github.com/justkd/rn-navigator/blob/main/assets/rn-navigator-new.gif?raw=true)
 
 ```
 const { 
