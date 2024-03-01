@@ -563,13 +563,3 @@ Backgrounds are optional. A default color and/or image can also be declared as a
   ```
   
   </details>
-  
-
-<style display='none'>
-  details > summary {
-    padding: 1rem;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-  }
-</style>
