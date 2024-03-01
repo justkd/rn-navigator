@@ -8,7 +8,11 @@ predefined backgrounds or background colors.
 Each route is just a route key you assign to a given component. These should each be top level components for the intended route.
 
 ```
-const { navigate, to, back } = useNavigation()
+const { 
+  navigate, 
+  to, 
+  back 
+} = useNavigation()
 navigate(to['/Home])
 navigate(back)
 ```
