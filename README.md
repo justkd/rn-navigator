@@ -7,7 +7,29 @@ predefined backgrounds or background colors.
 
 Each route is just a route key you assign to a given component. These should each be top level components for the intended route.
 
+```
+const { navigate, to, back } = useNavigation()
+navigate(to['/Home])
+navigate(back)
+```
+
 ![image](https://github.com/justkd/rn-navigator/blob/main/assets/rn-navigator.gif?raw=true)
+
+```
+const { 
+  navigate, 
+  navigator,
+  to, 
+  bg
+} = useNavigation()
+
+navigate(to.Last, { 
+   background: bg.one,
+   payload: { data: [] }
+})
+
+console.log( navigator.payload() )
+```
 
 # TODO
 
