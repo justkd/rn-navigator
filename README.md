@@ -1,4 +1,4 @@
-# @justkd/rn-navigator
+# rn-navigator
 
 React Native navigation with stateful transition animations leveraging
 predefined backgrounds or background colors.
