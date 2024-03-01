@@ -1,6 +1,6 @@
 import { getTypedRouteKeys, GetTypedRouteKeys } from '../../src'
 /* ******************** */
-const routeKeys = ['/Home', '/A', '/B', '/C', '/Last'] as const
+const routeKeys = ['/Home', '/Last'] as const
 /* ******************** */
 export const { navigationRouteKeys } =
   getTypedRouteKeys<typeof routeKeys>(routeKeys)

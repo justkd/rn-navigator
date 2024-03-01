@@ -6,10 +6,7 @@ import { Templates } from '../routes/Templates'
 /* ******************** */
 const routes: Record<NavigationRouteKey, ComponentType> = {
   '/Home': Templates[0],
-  '/A': Templates[1],
-  '/B': Templates[2],
-  '/C': Templates[3],
-  '/Last': Templates[4],
+  '/Last': Templates[1],
 }
 /* ******************** */
 export const { navigationRoutes } =

@@ -91,7 +91,7 @@ export function Template(props: {
             navigate<PayloadType>(route, { background, payload })
           }}
         >
-          <Text style={styles.text}>explore</Text>
+          <Text style={styles.text}>next</Text>
         </Pressable>
         <Pressable
           onPress={() => {
@@ -105,94 +105,9 @@ export function Template(props: {
             })
           }}
         >
-          <Text style={styles.text}>retreat</Text>
+          <Text style={styles.text}>back</Text>
         </Pressable>
       </View>
-      <View style={styles.section}>
-        <Pressable
-          onPress={() => {
-            setTest('* you are glowing with a protective aura *')
-          }}
-        >
-          <Text style={styles.text}>
-            {test || 'cast protection'}
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.section}>
-        <Pressable
-          onPress={() => {
-            try {
-              // This is not guarded.
-              type ExpectedPayloadType = PayloadType
-              const payload =
-                navigator.payload<ExpectedPayloadType>()
-              console.log(payload)
-            } catch (e) {
-              console.log(e)
-            }
-          }}
-        >
-          <Text style={styles.text}>look around</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            // This is not guarded.
-            type ExpectedPayloadType = PayloadType
-            const payload =
-              navigator.payload<ExpectedPayloadType>(1)
-            console.log(payload)
-          }}
-        >
-          <Text style={styles.text}>look behind you</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            // This is not guarded.
-            type ExpectedPayloadType = PayloadType
-            const payload =
-              navigator.payload<ExpectedPayloadType>(2)
-            console.log(payload)
-          }}
-        >
-          <Text style={styles.text}>look far behind you</Text>
-        </Pressable>
-      </View>
-      <Pressable
-        onPress={() => {
-          // This is not guarded.
-          type ExpectedPayloadType = PayloadType
-          const payload =
-            navigator.payload<ExpectedPayloadType>()
-          if (payload) payload.readSign()
-          else console.log('There is no sign.')
-        }}
-      >
-        <Text style={styles.text}>read sign</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          console.log(navigator.peek())
-        }}
-      >
-        <Text style={styles.text}>check journal</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          navigator.reset()
-        }}
-      >
-        <Text style={styles.text}>teleport</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          navigator.set({
-            history: [{ to: '/A' }],
-          })
-        }}
-      >
-        <Text style={styles.text}>alter history</Text>
-      </Pressable>
     </View>
   )
 }
