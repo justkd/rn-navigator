@@ -42,6 +42,7 @@ console.log( navigator.payload() )
 - tests 😒
 - other animation options
 - skip animation
+- less setup
 
 ## Install
 
