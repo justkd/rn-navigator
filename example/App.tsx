@@ -8,6 +8,7 @@ import {
 export function App() {
   return (
     <NavigationController
+      topLevelController
       initialRoute="/Home"
       backgroundColor="black"
       routes={navigationRoutes}

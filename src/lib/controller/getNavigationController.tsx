@@ -10,7 +10,6 @@ import {
   Animated,
   StyleSheet,
   useWindowDimensions,
-  type ImageSourcePropType,
   type ViewStyle,
 } from 'react-native'
 import {
@@ -61,7 +60,7 @@ export function getNavigationController<
   return {
     /**
      * Hook generated in your own navigation file after setting up
-     * `@justkd/rn-navigator`. Returns an object `NavigationContextType`
+     * `@justkd/rn-navigator`. Returns an object `UseNavigationReturnType<R, B>`
      * with navigation and utility functions and helpers.
      * @example
      * import { useNavigation } from 'your_project_path_to/Your_Navigation.ts'

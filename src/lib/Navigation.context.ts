@@ -7,8 +7,8 @@ import {
 import { backToken } from './Navigation.tokens'
 
 export const useNavigationContext = <
-  RouteGeneric extends string | number | symbol,
-  BackgroundGeneric extends string | number | symbol,
+  RouteGeneric,
+  BackgroundGeneric,
 >(
   state: NavigationState,
   dispatch: Dispatch<DispatchAction>,
