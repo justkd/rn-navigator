@@ -88,7 +88,7 @@ import ImageFive from './assets/5.jpg'
 import ImageSix from './assets/6.jpg'
 
 // Enforce record type and map transition backgrounds to background keys.
-// The keys are arbitrary.
+// The keys are arbitrary. This should be cast to `as const` as well.
 
 const backgrounds: Record<string, NavigationBackground> = {
   one: { image: { source: ImageOne } },
@@ -107,7 +107,7 @@ const backgrounds: Record<string, NavigationBackground> = {
   black: { color: 'black' },
   blue: { color: 'blue' },
   cyan: { color: 'cyan' },
-}
+} as const
 
 // Export the returned, deconstructed values 
 // `navigationBackgrounds` and `navigationBackgroundKeys`.
