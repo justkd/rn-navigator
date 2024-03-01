@@ -84,13 +84,51 @@ export type NavigationContextType<
   R extends string | number | symbol,
   B extends string | number | symbol,
 > = {
+  /**
+   * @example
+   * const { navigate, to } = useNavigation()
+   * navigate( to['/Home'] )
+   */
   navigate: NavigateFn<R>
+
+  /**
+   * Object exposing typed route keys for navigation.
+   * @example
+   * const { navigate, to } = useNavigation()
+   * navigate( to['/Home'] )
+   */
   to: Record<R, R>
+
+  /**
+   * Object exposing typed background keys for navigation.
+   * @example
+   * const { navigate, to, bg } = useNavigation()
+   * navigate( to['/Home'], { background: bg.one } )
+   */
   bg: Record<B, B>
+
+  /**
+   * Use as the navigation route target when
+   * navigating back in the history stack.
+   * @example
+   * const { navigate, back } = useNavigation()
+   * navigate( back )
+   */
   back: BackToken
+
+  /**
+   * Object holding utility methods for the navigator.
+   */
   navigator: {
+    /**
+     * Retrieve a copy of the navigation state.
+     */
     peek: () => NavigationState
-    clear: (background?: string) => void
+
+    /**
+     * Reset
+     */
+    reset: (background?: string) => void
     payload: <T extends GenericObj>(n?: number) => T | null
     route: (n?: number) => string | null
     set: (next: Partial<NavigationState>) => void

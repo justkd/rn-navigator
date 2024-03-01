@@ -3,7 +3,7 @@ import {
   navigationRoutes,
   navigationBackgrounds,
 } from './Navigation'
-// import DefaultBackgroundImage from './assets/DefaultBackgroundImage.jpg'
+// import DefaultBackgroundImage from './Navigation/assets/1.jpg'
 
 export function App() {
   return (

@@ -179,7 +179,7 @@ export function Template(props: {
       </Pressable>
       <Pressable
         onPress={() => {
-          navigator.clear()
+          navigator.reset()
         }}
       >
         <Text style={styles.text}>teleport</Text>

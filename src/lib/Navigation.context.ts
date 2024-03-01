@@ -119,7 +119,7 @@ export const useNavigationContext = <
    * const { navigator } = useNavigation()
    * console.log( navigator.clear() )
    */
-  const clear = useCallback(
+  const reset = useCallback(
     (background?: string) => {
       dispatch({
         type: 'navigate',
@@ -200,12 +200,12 @@ export const useNavigationContext = <
   const navigator = useMemo(
     () => ({
       peek,
-      clear,
+      reset,
       payload,
       route,
       set,
     }),
-    [payload, peek, clear, set, route],
+    [payload, peek, reset, set, route],
   )
   /* =^..^=  ✿  =^..^=  */
   const ctx = useMemo(
