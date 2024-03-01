@@ -52,7 +52,14 @@ export function getNavigationController<
   const NavigationContext = createContext<NCT>(null as any)
   /* =^..^=  ✿  =^..^=  */
   return {
-    /* =^..^=  ✿  =^..^=  */
+    /**
+     * Hook generated in your own navigation file after setting up
+     * `@justkd/rn-navigator`. Returns an object `NavigationContextType`
+     * with navigation and utility functions and helpers.
+     * @example
+     * import { useNavigation } from 'your_project_path_to/Your_Navigation.ts'
+     * const { navigate, to, bg, back, navigator } = useNavigation()
+     */
     useNavigation() {
       const ctx = NavigationContext
       return useContext(ctx)
