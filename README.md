@@ -7,6 +7,8 @@ predefined backgrounds or background colors.
 
 Each route is just a route key you assign to a given component. These should each be top level components for the intended route.
 
+![image](https://github.com/justkd/rn-navigator/blob/main/assets/rn-navigator.gif?raw=true)
+
 # TODO
 
 - tests 😒
