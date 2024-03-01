@@ -572,11 +572,4 @@ Backgrounds are optional. A default color and/or image can also be declared as a
     cursor: pointer;
     font-weight: 500;
   }
-
-  /* details > p {
-    background-color: #eeeeee;
-    padding: 4px;
-    margin: 0;
-    box-shadow: 1px 1px 2px #bbbbbb;
-  } */
 </style>
