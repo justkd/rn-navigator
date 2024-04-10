@@ -258,7 +258,11 @@ Backgrounds are optional. A default color and/or image can also be declared as a
     getNavigationController<
       typeof navigationRouteKeys,
       typeof navigationBackgrounds
-    >()
+    >({
+    onNavigation: (state) => {
+      console.log('navigate', state)
+    },
+  })
   ```
 
 </details>
@@ -277,7 +281,11 @@ Backgrounds are optional. A default color and/or image can also be declared as a
     getNavigationController<
       typeof navigationRouteKeys,
       typeof navigationBackgrounds
-    >()
+    >({
+    onNavigation: (state) => {
+      console.log('navigate', state)
+    },
+  })
   ```
 
 </details>
