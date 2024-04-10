@@ -6,4 +6,8 @@ export const { NavigationController, useNavigation } =
   getNavigationController<
     typeof navigationRouteKeys,
     typeof navigationBackgrounds
-  >()
+  >({
+    onNavigation: (state) => {
+      console.log('navigate', state)
+    },
+  })

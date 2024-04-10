@@ -47,7 +47,15 @@ const styles = StyleSheet.create({
 export function getNavigationController<
   RouteGeneric,
   BackgroundGeneric = any,
->() {
+>(opts?: {
+  onNavigation: (state: {
+    from: string
+    to: string
+    back: boolean
+    background?: string
+    payload?: any
+  }) => void
+}) {
   /* =^..^=  ✿  =^..^=  */
   type Routes = Record<keyof RouteGeneric, ComponentType>
   type UserRouteKey = keyof Omit<RouteGeneric, typeof backToken>
@@ -156,6 +164,7 @@ export function getNavigationController<
         String(initialRoute),
         anims,
         { topLevelController },
+        opts?.onNavigation,
       )
       /* =^..^=  ✿  =^..^=  */
       return (

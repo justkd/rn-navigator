@@ -3,7 +3,15 @@ import { type UseNavigationReturnType, type NavigationControllerProps } from '..
  * Returns a function component representing the `NavigationController`
  * and a `useNavigation` hook specific to that controller.
  */
-export declare function getNavigationController<RouteGeneric, BackgroundGeneric = any>(): {
+export declare function getNavigationController<RouteGeneric, BackgroundGeneric = any>(opts?: {
+    onNavigation: (state: {
+        from: string;
+        to: string;
+        back: boolean;
+        background?: string;
+        payload?: any;
+    }) => void;
+}): {
     /**
      * Hook generated in your own navigation file after setting up
      * `@justkd/rn-navigator`. Returns an object `UseNavigationReturnType<R, B>`

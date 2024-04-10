@@ -16,6 +16,13 @@ export const useNavigationHooks = (
   initialRoute: string,
   animations: NavigationAnimations,
   props: LocallyDependentProps,
+  onNavigation?: (state: {
+    from: string
+    to: string
+    back: boolean
+    background?: string
+    payload?: any
+  }) => void,
 ) => {
   /* =^..^=  ✿  =^..^=  */
   useEffect(() => {
@@ -40,6 +47,13 @@ export const useNavigationHooks = (
       }
       // animate back nav event
       animations.backOut.start(() => {
+        onNavigation?.({
+          to: state.history[0].to,
+          from: state.queue[0].to,
+          back: true,
+          background: state.background ?? undefined,
+          payload: state.queue[1].payload ?? undefined,
+        })
         animations.reset(() => {
           dispatch({ type: 'go_back_in_history' })
           animations.backIn().start(() => {
@@ -51,6 +65,13 @@ export const useNavigationHooks = (
     }
     // animate forward nav event
     animations.out.start(() => {
+      onNavigation?.({
+        to: state.queue[1].to,
+        from: state.queue[0].to,
+        back: false,
+        background: state.background,
+        payload: state.queue[1].payload,
+      })
       animations.reset(() => {
         dispatch({ type: 'go_forward_in_history' })
         animations.in.start(() => {
@@ -58,7 +79,7 @@ export const useNavigationHooks = (
         })
       })
     })
-  }, [state, animations, dispatch])
+  }, [state, animations, dispatch, onNavigation])
   /* =^..^=  ✿  =^..^=  */
   useEffect(
     // on dismount NavigationController
