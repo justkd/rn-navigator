@@ -122,6 +122,7 @@ export function getNavigationController<
         backgroundImage,
         backgrounds,
         topLevelController = true,
+        children,
       } = props
       /* =^..^=  ✿  =^..^=  */
       const animT = useRef(new Animated.Value(0))
@@ -185,6 +186,7 @@ export function getNavigationController<
             animO={animO.current}
             animT={animT.current}
           />
+          {children}
         </NavigationContext.Provider>
       )
     },

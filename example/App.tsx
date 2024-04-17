@@ -1,3 +1,5 @@
+import { View } from 'react-native'
+
 import {
   NavigationController,
   navigationRoutes,
@@ -14,6 +16,15 @@ export function App() {
       routes={navigationRoutes}
       backgrounds={navigationBackgrounds}
       // backgroundImage={DefaultBackgroundImage}
-    />
+    >
+      <View
+        style={{
+          backgroundColor: 'red',
+          position: 'absolute',
+          height: 50,
+          width: 50,
+        }}
+      />
+    </NavigationController>
   )
 }

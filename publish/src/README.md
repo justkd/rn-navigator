@@ -43,7 +43,9 @@ console.log( navigator.payload() )
 - tests 😒
 - other animation options
 - skip animation
-- less setup
+- refactor for less setup
+- add docs for middleware
+- add docs for navigator children
 
 ## Install
 

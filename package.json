@@ -1,7 +1,7 @@
 {
   "name": "@justkd/rn-navigator",
   "author": "Cadence Holmes, @justkd",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "license": "MIT",
   "description": "React Native navigation with stateful transition animations leveraging predefined backgrounds or background colors.",
   "keywords": [
