@@ -4,7 +4,7 @@ import { NavigationErrorView } from '../error/Navigation.ErrorView'
 import { type NavigationState } from '../Navigation.types'
 
 export function AnimatedContainer<
-  UserRouteKey extends number | string | symbol,
+  UserRouteKey extends number | string | symbol
 >(props: {
   routes: Record<UserRouteKey, ComponentType>
   state: NavigationState
@@ -29,11 +29,12 @@ export function AnimatedContainer<
         }),
       },
     ],
-    [animT, width],
+    [animT, width]
   )
   /* Nav animation container. */
   return (
     <Animated.View
+      pointerEvents={state.isNavigating ? 'none' : 'auto'}
       style={{
         height: '100%',
         width: '100%',

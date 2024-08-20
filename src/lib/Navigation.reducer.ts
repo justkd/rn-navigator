@@ -7,7 +7,7 @@ import {
 
 export function navigationReducer(
   state: NavigationState,
-  action: DispatchAction,
+  action: DispatchAction
 ) {
   switch (action.type) {
     /* =^..^=  ✿  =^..^=  */
@@ -49,9 +49,11 @@ export function navigationReducer(
         ? navDirTokens.back
         : navDirTokens.error
       const isNavigating =
-        typeof event !== 'boolean' && event?.to === backToken
-          ? whichBackType
-          : navDirTokens.fwd
+        typeof event !== 'boolean'
+          ? event?.to === backToken
+            ? whichBackType
+            : navDirTokens.fwd
+          : null
       return event
         ? {
             ...state,
@@ -76,6 +78,7 @@ export function navigationReducer(
         return {
           ...state,
           queue,
+          isNavigating: null,
         }
       }
       const history = [...state.history]
@@ -105,7 +108,7 @@ export function navigationReducer(
     /* =^..^=  ✿  =^..^=  */
     default: {
       throw Error(
-        `rn-navigator : unknown navigation action : ${action.type}`,
+        `rn-navigator : unknown navigation action : ${action.type}`
       )
     }
     /* =^..^=  ✿  =^..^=  */
